@@ -1,0 +1,117 @@
+// Import Google Icon Font
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css?family=Lekton');
+
+// Import materialize.css
+@import "../node_modules/materialize-css/dist/css/materialize.css";
+
+body {
+    background-color: #fbfbfb;
+}
+
+.titulo{
+    font: {
+        family: 'Lekton', sans-serif;
+    }
+
+    color: #777 !important;
+
+    &:after {
+        content:"_";
+        opacity: 0;
+        animation: cursor 1s infinite;
+    }
+}
+   
+.search:after {
+    content: "search";
+    font-family: 'Material Icons';
+    font-size: 2rem;
+    color: #01579b !important;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* label color */
+.input-field label {
+    color: #01579b;
+}
+/* label underline focus color */
+.input-field input, .input-field textarea, .input-field #selector {
+    color: #01579b !important;
+    box-shadow: 0 1px 0 0 #01579b !important;
+    border-bottom: 1px solid #01579b !important;
+}
+/* label focus color */
+.input-field input:focus + label, .input-field textarea:focus + label, .input-field #selector:focus + label {
+    color: #01579b !important;
+}
+/* label underline focus color */
+.input-field input:focus, .input-field textarea:focus, .input-field #selector:focus {
+    border-bottom: 1px solid #01579b !important;
+    box-shadow: 0 1px 0 0 #01579b !important;
+}
+
+.collection {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    margin: 0 !important;
+}
+
+// a list of oficinas by filter
+.collection-item {
+    color: #777 !important;
+    margin: 0 !important;
+    border-bottom: 0px solid #e0e0e0 !important; 
+}
+
+.input-search{
+    margin: 0 !important;
+    text-decoration-color: #777 !important;
+}
+
+.collection a.collection-item:not(.active):hover {
+    background-color: rgba(0, 53, 120, 0.1) !important;
+    text-decoration: none !important;
+}
+
+/* error color */
+.input-field small {
+    color: #FB0035;
+}
+
+.ok{
+    color: #40C96B;
+}
+
+.ko{
+    color: #FB0035;
+}
+
+/* button color */
+.button-action-reserva, #button-action-save {
+    background-color: #003578 !important;
+}
+
+#button-action-cancel, #button-action-delete {
+    background-color: #FB0035 !important;
+}
+
+//Animations
+@keyframes cursor {
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

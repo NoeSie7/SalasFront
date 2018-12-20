@@ -1,0 +1,21 @@
+{
+    "success": "OK",
+    "mensaje": "OK",
+    "oficinaList": [
+        {
+            "idOficina": 1,
+            "nombreOficina": "Santiago de Compostela",
+            "direccion": "Calle José Villar Granjel 24, Polígono de Boisaca"
+        },
+        {
+            "idOficina": 2,
+            "nombreOficina": "Ourense",
+            "direccion": "Rúa do Progreso 5, 32005 - Ourense"
+        },
+        {
+            "idOficina": 3,
+            "nombreOficina": "Madrid",
+            "direccion": "Calle de Santa Engracia 31, 28010 - Madrid"
+        }
+    ]
+}

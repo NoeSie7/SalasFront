@@ -1,0 +1,59 @@
+<div class="container card-panel">
+  <div class="container">
+    <div class="row">
+      <div class="col s1"></div>
+      <div class="col s1 timeline-hour" *ngFor="let hour of hours">
+        <span>{{hour}}</span>
+      </div>
+    </div>
+    <div class="row rooms-container">
+      <div class="boxText">
+        <!-- Modal Structure -->
+        <div id="modalSalas" *ngIf="showSala===true" class="modal">
+          <div class="imgModalSala defaultFoto fotoSala{{salas[nSala]['idSala']}}"></div>
+          <div class="modal-content">
+            <div>
+              <p class="title">Descripción de la sala</p>
+            </div>
+            <div class="datosSala">
+              <p class="localizacionSala">{{currentOficina.nombreOficina}}</p>
+              <p class="nombreSala">{{salas[nSala]["nombre"]}}</p>
+              <p class="personasSala">{{salas[nSala]["plazas"]}} ocupantes</p>
+              <p class="descripcionSala">{{salas[nSala]["detalle"]}} </p>
+            </div>
+            <div class="modal-footer">
+              <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="cerrarModalSala()">Cerrar</a> -->
+              <button value="Cancelar" class="discard modal-close btn waves-effect waves-light" (click)="cerrarModalSala()">X</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-overlay-sala" *ngIf="showSala===true" (click)="cerrarModalSala()">
+        </div>
+        <div *ngIf="salas.length > 0">
+          <div class="row rooms" *ngFor="let sala of salas; let i = index">
+            <div class="col s1 rooms-name" id="{{i}}" (click)="modalDatosSala($event)">
+              {{sala.nombre}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="boxTime">
+        <div *ngIf="salas.length > 0">
+          <div class="row rooms" *ngFor="let sala of salas, let x = index">
+            <div class="col s1 rooms-reserve">
+              <app-reserva-item *ngFor="let reservaItem of sala.reservas, let i = index" [indice]="i+x" [indiceSala]="x" [currentSala]="sala"
+                [currentReserva]="reservaItem" [(confirmationPopup)]="confirmationPopup"></app-reserva-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-reserva *ngIf="currentReserva!==undefined && currentReserva!==null" [currentOficina]="currentOficina" [currentSala]="currentSala"
+      [currentReserva]="currentReserva" [(confirmationPopup)]="confirmationPopup" (acceptEmiter)="accept()" (cancelEmiter)="cancel()"></app-reserva>
+  </div>
+
+  <a id="button-creation" class="button-action-reserva btn-floating btn-large waves-effect waves-light" (click)="newReserva(sala)"
+    value="Crear Reserva">
+    <i class="material-icons">add</i>
+  </a>
+</div>

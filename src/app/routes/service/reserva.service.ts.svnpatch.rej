@@ -1,0 +1,45 @@
+--- src/main/frontend/src/app/routes/service/reserva.service.ts
++++ src/main/frontend/src/app/routes/service/reserva.service.ts
+@@ -11,7 +11,7 @@
+ 
+   getReservasBySala(idSala): Observable<Reserva[]> {
+     // api
+-    return this.http.get('/getAllReservasByIdSala/' + idSala)
++    return this.http.get('/api/getAllReservasByIdSala/' + idSala)
+       .map(res => res.json().reservaAuxList);
+   }
+ 
+@@ -99,7 +99,7 @@
+     //   .map(res => responseAux);
+ 
+     // api
+-    return this.http.get('/sala/' + idSala + '/reservas/' + this.getFormatedDateForRest(date))
++    return this.http.get('/api/sala/' + idSala + '/reservas/' + this.getFormatedDateForRest(date))
+       .map(res => res.json());
+   }
+ 
+@@ -108,13 +108,22 @@
+     reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
+     const headers = new Headers({'Content-Type': 'application/json'});
+     const options = new RequestOptions({headers: headers});
+-    return this.http.post('/insertOrUpdateReserva', JSON.stringify(reserva), options)
++    return this.http.post('/api/insertOrUpdateReserva', JSON.stringify(reserva), options)
++      .map(res => res.json());
++  }
++
++  insertOrUpdateReservas(reserva): Observable<any> {
++    // api
++    reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
++    const headers = new Headers({'Content-Type': 'application/json'});
++    const options = new RequestOptions({headers: headers});
++    return this.http.post('/api/insertOrUpdateReservas', JSON.stringify(reserva), options)
+       .map(res => res.json());
+   }
+ 
+   deleteReserva(idReserva): Observable<any> {
+     // api
+-    return this.http.get('/deleteReserva/' + idReserva).map(res => res.json());
++    return this.http.get('/api/deleteReserva/' + idReserva).map(res => res.json());
+   }
+ 
+   getFormatedDateForRest(date) {

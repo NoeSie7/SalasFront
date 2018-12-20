@@ -1,0 +1,18 @@
+--- src/main/frontend/src/app/routes/service/oficina.service.ts
++++ src/main/frontend/src/app/routes/service/oficina.service.ts
+@@ -27,13 +27,13 @@
+       .map(res => res.json().oficinaList);*/
+ 
+     // api
+-    return this.http.get('/getAllOficinas')
++    return this.http.get('/api/getAllOficinas')
+       .map(res => res.json().oficinaList);
+   }
+ 
+   getSalasByOficina(idOficina): Observable<any> {
+     // api
+-    return this.http.get('/getAllSalasByIdOficina/' + idOficina)
++    return this.http.get('/api/getAllSalasByIdOficina/' + idOficina)
+       .map(res => res.json().salaList);
+   }
+ 

@@ -1,0 +1,23 @@
+.timelineItem {
+    display: block;
+    position: absolute;
+    height: 15px;
+    border-radius: 25px;
+    opacity: 0.7;
+    cursor: pointer;
+}
+.timelineItem-label {
+    position: absolute;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -16px;
+    cursor: pointer;
+}
+.timelineItem-tooltip {
+    visibility: hidden;
+}
+
+.row .col.s1 {
+    width: 7.6923%;
+}

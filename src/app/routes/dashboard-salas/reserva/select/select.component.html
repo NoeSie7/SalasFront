@@ -1,0 +1,17 @@
+<div [ngClass]="{'modal-select-overlay':showSelect===true}" (click)="clickSelect()"></div>
+<div class="select-wrapper">
+  <span class="caret" [ngClass]="{'dn': flagClass === true }">▼</span>
+  <!-- <input hidden "{{nombreControlForm}}" [value]="valorId" > -->
+  <input type="text" class="select-dropdown" readonly="true" [ngClass]="{'dn': flagClass === true }" value="{{nombreSelect}}"
+    (click)="clickSelect()">
+  <ul class="dn" [ngClass]="{'listaSelect ': flagClass === true }">
+    <li>
+      <span class="disabled">Selecciona una sala</span>
+    </li>
+    <div *ngIf="oficinaService.salasList.length > 0">
+      <li *ngFor="let sala of oficinaService.salasList" [value]="sala.idSala" (click)="clickSelectLi(sala)">
+        <span>{{sala.nombre}}</span>
+      </li>
+    </div>
+  </ul>
+</div>

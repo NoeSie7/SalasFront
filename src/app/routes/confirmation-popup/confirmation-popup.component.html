@@ -1,0 +1,17 @@
+<div id="modalConfirmation" class="modal">
+  <div class="modal-content">
+    <h4 class="confirmation-title">{{confirmationModel.title}}</h4>
+    <p class="confirmation-message">
+      {{confirmationModel.message}}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <div *ngIf="confirmationModel.active == true;else masContenido">
+      <a (click)="onCancel()" class="modal-action modal-close waves-effect waves-red btn-flat boton-confirmation-cancel">Cancelar</a>
+      <a (click)="onAccept()" id="cerrarReserva" class="modal-action modal-close waves-effect waves-red btn-flat boton-confirmation-acept">Aceptar</a>
+    </div>
+    <ng-template #masContenido>
+      <a (click)="onCancel()" class="modal-action modal-close waves-effect waves-red btn-flat boton-confirmation-cancel">Cancelar</a>
+    </ng-template>
+  </div>
+</div>

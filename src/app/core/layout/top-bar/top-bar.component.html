@@ -1,0 +1,60 @@
+<!-- nav-bar -->
+ <!-- lupa -->
+ <div class="col s2 ">
+  <a href="" class="search-icon button-collapse" data-activates="slide-out" (click)="openSearch()"></a>
+</div>
+<ul id="slide-out" class="side-nav" style="transform: translateX(0px);">
+  <div class="container">
+    <form action="search" class="row">
+      <div class="col s12">
+        <div class="col s12">
+          <h3>reserva de salas</h3>
+        </div>
+        <!-- Search input-->
+        <div class="input-field col s12 searcher">
+          <input type="text" id="search-index-input" class="autocomplete input-search" [(ngModel)]="filter.nombreOficina" name="inputSearch"
+            autocomplete="off">
+          <label for="search-index-input">Selecciona la oficina para comenzar la reserva...</label>
+        </div>
+        <!-- END Search input-->
+        <!-- Resuts input-->
+        <div class="col s12 list-group mx-auto index-search-results" *ngIf="filter.nombreOficina != null && filter.nombreOficina != '' ">
+          <div class="collection">
+            <a class="collection-item" (click)="selectOficina(oficina.idOficina)" *ngFor="let oficina of oficinas | oficinaFilter:filter">
+                      {{oficina.nombreOficina}}</a>
+          </div>
+        </div>
+        <!-- END Resuts input-->
+      </div>
+    </form>
+  </div>
+</ul>
+<div class="navbar-fixed" id="app-nav-bar">
+  <nav>
+    <div class="row nav-wrapper grey lighten-5">
+      <!-- logo -->
+      <div class="col s4">
+        <a href="" class="brand-logo icon-chmod">
+          <!-- TODO: agregar log de Plexus -->
+          reserva de salas
+        </a>
+      </div>
+      <!-- datepicker field -->
+      <div class="col s4">
+        <div class="input-field date">
+          <input type="text" id="search-date-input" class="datepicker" value="" [(ngModel)]="searchDateInput">
+          <input type="button" id="search-date-button" (click)="searchDateInputChange()">
+        </div>
+      </div>
+      <!-- search field -->
+      <div class="col s4 input-field search">
+        <!-- input -->
+        <div class="col s10">
+          <input type="text" id="search-oficina-input" class="autocomplete input-search" [(ngModel)]="searchOficinaInput" (ngModelChange)="onSearch()"
+            autocomplete="off" disabled>
+        </div>
+       
+      </div>
+    </div>
+  </nav>
+</div>

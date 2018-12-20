@@ -1,0 +1,305 @@
+@import '../../../../sass/components/variables';
+#app-nav-bar {
+  nav {
+    .input-field {
+      margin: 0 {
+        left: auto;
+      }
+    }
+    .nav-wrapper {
+      .brand-logo {
+        font: {
+          family: Lekton-Regular;
+          size: 1.5rem;
+        }
+        color: $c_text_primary;
+        position: static;
+        &:after {
+          content: "_";
+          opacity: 0;
+          animation: cursor 1s infinite;
+          position: relative;
+          left: -10px;
+          @media #{$mq_tablet}{
+            left: -5px;
+          }
+        }
+        &.icon-chmod:before {
+          position: relative;
+          left: 15px;
+          top: 10px;
+          margin: {
+            right: 15px;
+          }
+          @media #{$mq_tablet}{
+            margin-right: 5px;
+          }
+        }
+        @media #{$mq_tablet}{
+          position: relative;
+          width: 100%;
+          font-size: 1rem;
+        }
+      }
+      .date {
+        transition: all 0.5s;
+        text-align: center;
+        &picker {
+          width: 50%;
+          color: $c_text_secondary;
+          text-align: center;
+          border: 0;
+          &:hover {
+            color: $c_text_primary;
+            cursor: pointer;
+          }
+        }
+        &:after {
+          content: "event";
+          font: {
+            family: 'Material Icons';
+            size: 1.2rem;
+          }
+          text: {
+            transform: lowercase;
+          }
+          color: $c_text_secondary;
+          position: relative;
+          right: 45%;
+          top: 4px;
+          @media #{$mq_tablet}{
+            right: 58%;
+          }
+        }
+        &:before {
+          content: "";
+          width: 0;
+          border: 0.5px solid $c_text_primary;
+          position: absolute;
+          bottom: 25px;
+          left: 27.5%;
+          transition: all 0.5s;
+        }
+        &:hover {
+          &:after {
+            color: $c_text_primary;
+          }
+          &:before {
+            width: 30%;
+            @media #{$mq_tablet}{
+              width: 45%;
+              left: 40px;
+            }
+          }
+        }
+      }
+      .search {
+        text-align: right;
+        padding-left: 0px;
+        .autocomplete {
+          color: $c_text_primary;
+          width: 100%;
+          text-align: right;
+          border: 0;
+          @media #{$mq_tablet}{
+            text-align: start;      
+            font-size: 0.8rem;
+          }
+        }
+        .search-icon {
+          $size: 45px;
+          width: $size;
+          height: $size;
+          color: $c_text_primary;
+          border: {
+            radius: 50%;
+          }
+          background: {
+            color: rgba(199, 199, 199, 0.3);
+          }
+          font-family: "Material Icons";
+          font-size: 1.5rem;
+          display: block;
+          text-align: center;
+          line-height: 45px;
+          margin-top: 10px;
+          cursor: pointer;
+          transition: all 0.5s;
+          &:hover {
+            background: {
+              color: rgba(199, 199, 199, 1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+ul.side-nav {
+  .container {
+    padding-top: 15vh;
+    form {
+      $padding: 5%;
+      padding: {
+        left: $padding;
+        right: $padding;
+        top: 0;
+        bottom: 0;
+      }
+      max: {
+        height: 169px;
+      }
+      overflow: visible;
+      z-index: $z_top;
+      div {
+        @media #{$mq_portrait}{
+          padding: 0 0 0 40px;
+          .searcher {
+            label {
+              padding-left: 30px;
+            }
+          }
+        }
+        h3 {
+          font: {
+            family: Lekton-Regular;
+          }
+          color: $c_text_primary;
+          &:after {
+            content: "_";
+            opacity: 0;
+            animation: cursor 1s infinite;
+          }
+          @media only screen and #{$mq_iphonePlus} {
+            font: {
+              size: 2rem;
+            }
+          }
+        }
+        .searcher {
+          label {
+            color: $c_primary;
+          }
+          input {
+            border: {
+              bottom: 2px solid $c_primary;
+            }
+            margin: 0;
+            box-shadow: none;
+          }
+          &:after {
+            content: "search";
+            font-family: $f_material;
+            font-size: 2rem;
+            color: $c_primary;
+            position: absolute;
+            right: 10px;
+            top: 5px;
+          }
+        }
+        .list-group {
+          .collection {
+            box-shadow: $sdw_primary;
+            margin: -1px;
+            &-item {
+              color: $c_text_primary;
+              margin: 0;
+              border: 0;
+              &:not(.active):hover {
+                background-color: $c_primary_hover;
+                text-decoration: none !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-icon {
+  $size: 45px;
+  width: $size;
+  height: $size;
+  color: $c_text_primary;
+  border: {
+    radius: 50%;
+  }
+  background: {
+    color: rgba(199, 199, 199, 0.3);
+  }
+  font-family: "Material Icons";
+  font-size: 1.5rem;
+  display: block;
+  text-align: center;
+  line-height: 45px;
+  margin-top: 10px;
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 0;
+  z-index: 998;
+  transition: all 0.5s;
+  &::before {
+    content: "search";
+  }
+  &:hover {
+    background: {
+      color: rgba(199, 199, 199, 1);
+    }
+  }
+}
+
+.arrow {
+  z-index: 1000;
+  &:before {
+    content: "arrow_forward" !important;
+  }
+}
+
+.search-icon.button-collapse {
+  visibility: hidden;
+  position: fixed;
+}
+
+#app-nav-bar {
+  display: none;
+}
+
+#app-nav-bar.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+nav {
+  box-shadow: none;
+}
+
+.nav-title {
+  font: {
+    family: 'Lekton', sans-serif;
+  }
+  font-size: 1.7em;
+  color: #777 !important;
+}
+
+nav .input-field {
+  margin: 0 10px 0 10px;
+}
+
+.navbar-search-results {
+  position: absolute;
+  top: -54px;
+}
+
+.collection-item {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+
+#search-date-button {
+  display: none;
+}

@@ -1,0 +1,173 @@
+@import '../../../sass/components/variables';
+.container {
+  padding-top: 30vh;
+  form {
+    $padding: 5%;
+    padding: {
+      left: $padding;
+      right: $padding;
+      top: 0;
+      bottom: 0;
+    }
+    max: {
+      height: 169px;
+    }
+    overflow: visible;
+    z-index: $z_top;
+    div {
+      h3 {
+        font: {
+          family: Lekton-Regular;
+        }
+        color: $c_text_primary;
+        &:after {
+          content: "_";
+          opacity: 0;
+          animation: cursor 1s infinite;
+        }
+        @media only screen and #{$mq_iphonePlus} {
+          font: {
+            size: 2rem;
+          }
+        }
+      }
+      .searcher {
+        @media #{$mq_mobile}{
+          label{
+              font-size: 0.85rem;
+          }
+        }
+        label {
+          color: $c_primary;
+        }
+        input {
+          border: {
+            bottom: 2px solid $c_primary;
+          }
+          margin: 0;
+          box-shadow: none;
+        }
+        &:after {
+          content: "search";
+          font-family: $f_material;
+          font-size: 2rem;
+          color: $c_primary;
+          position: absolute;
+          right: 10px;
+          top: 5px;
+        }
+      }
+      .list-group {
+        .collection {
+          box-shadow: $sdw_primary;
+          margin: -1px;
+          &-item {
+            color: $c_text_primary;
+            margin: 0;
+            border: 0;
+            &:not(.active):hover {
+              background-color: $c_primary_hover;
+              text-decoration: none !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.copyright {
+  position: absolute;
+  top: 45vh;
+  left: -75px;
+  transform: rotate(-90deg);
+  color: $c_primary;
+  a{
+    text: {
+      transform: none;
+      decoration: none;
+    }
+    color: $c_primary;
+  }
+  @media only screen and #{$mq_mobile} {
+    display: none;
+  }
+}
+
+.buscador {
+  padding: 0;
+  z-index: 4;
+}
+
+.index-search-results {
+  $margin: 0.1%;
+  margin: {
+    left: $margin;
+    right: $margin;
+  }
+}
+
+#logo {
+  width: 210%;
+  height: 108%;
+  background-size: auto;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  background-position: right bottom;
+  position: fixed;
+  bottom: -30%;
+  right: -82%;
+  z-index: 2;
+}
+
+#div-logo {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.design {
+  text-align: center;
+  transform: rotate(-90deg);
+  position: absolute;
+  left: 21%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: auto;
+  z-index: 3;
+}
+
+.mobile-search- {
+  &bar {
+   
+  }
+  &results {
+    position: absolute;
+    right: 0;
+    left: 0;
+    padding: 0;
+    top: 43px;
+  }
+}
+
+
+/* Animations */
+
+@keyframes cursor {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,20 @@
+// Import materialize.css
+@import "~materialize-css/dist/css/materialize.css";
+
+/* Mixins */
+
+@import "components/font-face";
+
+/* Fonts & Icons*/
+
+@include font-face('Lekton-Regular', '../assets/fonts/lekton/Lekton-Regular', null, null, woff2);
+@include font-face('Lekton-Italic', '../assets/fonts/lekton/Lekton-Italic', null, null, woff2);
+@include font-face('Lekton-Bold', '../assets/fonts/lekton/Lekton-Bold', null, null, woff2);
+@include font-face('rsalas', '../assets/fonts/rsalas/rsalas', null, null, woff);
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+/* Components & Variables */
+
+@import 'components/variables';
+@import 'components/common';
+

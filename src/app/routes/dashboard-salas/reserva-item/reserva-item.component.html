@@ -1,0 +1,50 @@
+<!--<p>
+    <br> - Asunto: {{currentReserva.asunto}}
+    <br> - Usuario: {{currentReserva.usuario.nombre}}
+    <br> - Fecha: {{currentReserva.fecha}}
+    <br> - Desde: {{currentReserva.horaDesde}}
+    <br> - Hasta: {{currentReserva.horaHasta}}
+    <br>
+    <a class="button-action-reserva btn-floating btn-large waves-effect waves-light" 
+        (click)="view()" value="Crear Reserva">
+        <i class="material-icons">visibility</i>
+    </a>
+    <a class="button-action-reserva btn-floating btn-large waves-effect waves-light" 
+        (click)="edit()" value="Editar Reserva">
+        <i class="material-icons">mode_edit</i>
+    </a>
+    <a id="button-action-delete" class="btn-floating btn-large waves-effect waves-light" 
+        (click)="delete()" value="Eliminar Reserva">
+        <i class="material-icons">delete</i>
+    </a>
+</p>
+<hr>-->
+<div *ngIf="currentReserva.asunto; else contenidoElse ">
+    <label class="timelineItem-label" [style.width]="getReservaWidth()" [style.marginLeft.%]="getReservaMargin()" for="reserva-{{currentReserva.idReserva}}">{{currentReserva.asunto}} - {{currentReserva.usuario.nombre}}</label>
+</div>
+<ng-template #contenidoElse>
+    <label class="timelineItem-label" [style.width]="getReservaWidth()" [style.marginLeft.%]="getReservaMargin()" for="reserva-{{currentReserva.idReserva}}">{{currentReserva.usuario.nombre}}</label>
+</ng-template>
+<!-- <label class="timelineItem-label" [style.width]="getReservaWidth()" [style.marginLeft.%]="getReservaMargin()" for="reserva-{{currentReserva.idReserva}}">{{currentReserva.asunto}} - {{currentReserva.usuario.nombre}}</label> -->
+
+<span class="timelineItem tooltipped button-action-reserva" [style.width]="getReservaWidth()" [style.marginLeft.%]="getReservaMargin()"
+    [style.background]="getReservaColor()" id="reserva-{{currentReserva.idReserva}}" (click)="edit()">
+    <div class="timelineItem-tooltip" id="tooltip-reserva-{{currentReserva.idReserva}}">
+        <div class="tooltip-content">
+            <p>{{currentReserva.asunto}}</p>
+            <p>{{currentReserva.horaDesde}} - {{currentReserva.horaHasta}}</p>
+            <p>{{currentReserva.usuario.nombre}}</p>
+            <p>{{currentReserva.usuario.email}}</p>
+            <p>Haz click en el Timeline para editar la reserva</p>
+            <!--<a id="view" class="button-action-reserva btn-floating btn-large waves-effect waves-light" (click)="view()" value="Ver Reserva">
+                <i class="material-icons">visibility</i>
+            </a>
+            <a class="button-action-reserva btn-floating btn-large waves-effect waves-light" (click)="edit()" value="Editar Reserva">
+                <i class="material-icons">mode_edit</i>
+            </a>-->
+            <!--<a id="button-action-delete" class="btn-floating btn-large waves-effect waves-light" (click)="delete()" value="Eliminar Reserva">
+                <i class="material-icons">delete</i>
+            </a>-->
+        </div>
+    </div>
+</span>
