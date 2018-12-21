@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Oficina } from "./oficina.model";
+import { Oficina } from './oficina.model';
 
 @Pipe({
     name: 'oficinaFilter',
@@ -16,12 +16,12 @@ export class OficinaFilterPipe implements PipeTransform {
     }
 
     applyFilter(oficina: Oficina, filter: Oficina): boolean {
-        for (let field in filter) {
+        for (const field in filter) {
             if (filter[field]) {
                 if (typeof filter[field] === 'string') {
                     // starts with
-                    //return oficina[field].toLowerCase().startsWith(filter[field].toLowerCase());
-                   // contains 
+                    // return oficina[field].toLowerCase().startsWith(filter[field].toLowerCase());
+                   // contains
                     if (oficina[field].toLowerCase().indexOf(filter[field].toLowerCase()) === -1) {
                         return false;
                     }

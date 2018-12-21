@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Oficina } from "../_data/oficina.model";
-import { Sala } from "../_data/sala.model";
-import { Reserva } from "../_data/reserva.model";
+import { Oficina } from '../_data/oficina.model';
+import { Sala } from '../_data/sala.model';
+import { Reserva } from '../_data/reserva.model';
 
 @Injectable()
 export class SharedService {
@@ -36,16 +36,16 @@ export class SharedService {
 
     // this.isConsulting = false;
 
-    let date = new Date();
+    const date = new Date();
     this.currentDate = this.customFormatter(date);
     this.currentDate$ = new BehaviorSubject(this.currentDate);
     this.emitCurrentDate();
 
-    this.currentHoraDesde = date.toTimeString().substr(0,5);
+    this.currentHoraDesde = date.toTimeString().substr(0, 5);
     this.currentHoraDesde$ = new BehaviorSubject(this.currentHoraDesde);
     this.emitCurrentHoraDesde();
 
-    this.currentHoraHasta = date.toTimeString().substr(0,5);
+    this.currentHoraHasta = date.toTimeString().substr(0, 5);
     this.currentHoraHasta$ = new BehaviorSubject(this.currentHoraHasta);
     this.emitCurrentHoraHasta();
 
@@ -188,7 +188,7 @@ export class SharedService {
   setCurrentDate(fecha) {
     this.currentDate = fecha;
   }
- 
+
   // getDateForHtml(date) {
   //   return date.split('-').reverse().join('/');
   // }
@@ -214,11 +214,11 @@ export class SharedService {
   }
 
   private customFormatter(date: Date): string {
-    let year = date.getFullYear();
-    let monthNumber = date.getMonth() + 1;
-    let monthString = monthNumber < 10 ? `0${monthNumber}`: `${monthNumber}`
-    let dayNumber = date.getUTCDate();
-    let dayString = dayNumber < 10 ? `0${dayNumber}`: `${dayNumber}`
+    const year = date.getFullYear();
+    const monthNumber = date.getMonth() + 1;
+    const monthString = monthNumber < 10 ? `0${monthNumber}` : `${monthNumber}`;
+    const dayNumber = date.getUTCDate();
+    const dayString = dayNumber < 10 ? `0${dayNumber}` : `${dayNumber}`;
 
     return `${dayString}/${monthString}/${year}`;
   }

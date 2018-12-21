@@ -1,0 +1,24 @@
+<div>
+
+    <table class="highlight">
+        <thead>
+          <tr>
+              <th>Nombre</th>
+              <th>Plazas</th>
+          </tr>
+        </thead>
+
+        <tbody>
+         <tr *ngFor="let sala of salas; let i = index">
+            <td>{{sala.nombre}}</td>
+            <td>{{sala.plazas}}</td>
+            <td>
+              <button class="btn btn-primary">👁</button>
+            </td>
+            <td>
+              <a [routerLink]="['/office/',sala.idOficina,'room',sala.idSala,'timetable']" class="btn btn-primary">📅</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>

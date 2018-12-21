@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { Oficina } from '../../../routes/_data/oficina.model';
-import { OficinaService } from '../../../routes/service/oficina.service';
-import { SharedService } from '../../../routes/service/shared.service';
+import { Oficina } from '../../../components/_data/oficina.model';
+import { OficinaService } from '../../../components/service/oficina.service';
+import { SharedService } from '../../../components/service/shared.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -56,7 +56,7 @@ export class TopBarComponent implements OnInit {
   selectOficina(idOficina) {
     // gets selected oficina and set it as current
     this.resultsEnable = false;
-    const selectedOficina = this.oficinas.find(x => x.idOficina == idOficina);
+    const selectedOficina = this.oficinas.find(x => x.idOficina === idOficina);
     this.searchOficinaInput = selectedOficina.nombreOficina;
     this.sharedService.updateCurrentOficina(selectedOficina);
     // updates salas
@@ -79,7 +79,7 @@ export class TopBarComponent implements OnInit {
     return true;
   }
   openSearch() {
-    document.getElementById("search-index-input").focus();
-    this.filter.nombreOficina = "";
+    document.getElementById('search-index-input').focus();
+    this.filter.nombreOficina = '';
   }
 }

@@ -38,12 +38,12 @@ export class IndexComponent implements OnInit {
     this.oficinaService.currentOficina = selectedOficina;
     this.sharedService.updateCurrentOficina(selectedOficina);
     // redirects to salas module
-    this.router.navigate(['./salas']);
+    this.router.navigate([`./office/${idOficina}`]);
   }
 
   hideNavbar() {
     // gets the navbar element
-    $('#app-nav-bar').css('display','none');
+    $('#app-nav-bar').css('display', 'none');
     $('.search-icon.button-collapse').css('visibility', 'hidden');
   }
 }

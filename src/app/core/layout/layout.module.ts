@@ -7,9 +7,9 @@ import { ShellComponent } from './shell/shell.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MainContentComponent } from './main-content/main-content.component';
 
-import { IndexModule } from "../../routes/index/index.module";
-import { AboutModule } from "../../routes/about/about.module";
-import { DashboardSalasModule } from "../../routes/dashboard-salas/dashboard-salas.module";
+import { IndexModule } from '../../components/index/index.module';
+import { AboutModule } from '../../components/about/about.module';
+import { DashboardSalasModule } from '../../components/dashboard-salas/dashboard-salas.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ValidatorsService } from "./forms/validators.service";
-import { FormsToolsService } from "./forms/forms-tools.service";
-import { OficinaFilterPipe } from '../../routes/_data/oficina-filter.pipe';
+import { ValidatorsService } from './forms/validators.service';
+import { FormsToolsService } from './forms/forms-tools.service';
+import { OficinaFilterPipe } from '../../components/_data/oficina-filter.pipe';
 
 @NgModule({
   declarations: [OficinaFilterPipe],

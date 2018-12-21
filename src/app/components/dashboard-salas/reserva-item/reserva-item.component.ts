@@ -22,10 +22,9 @@ export class ReservaItemComponent implements OnInit {
   @Input() currentReserva: Reserva;
   @Input() indice: number;
   @Input() indiceSala: number;
-  
 
   constructor(private sharedService: SharedService,
-    private reservaService: ReservaService,private salaService: SalaService) {
+    private reservaService: ReservaService, private salaService: SalaService) {
     this.currentReserva = new Reserva();
   }
 
@@ -44,12 +43,12 @@ export class ReservaItemComponent implements OnInit {
     // sets currentSala and currentReserva
     this.sharedService.updateCurrentSala(this.currentSala);
     this.sharedService.updateCurrentReserva(this.currentReserva);
-    //recollo o valor do id sala
+    // recollo o valor do id sala
     this.sharedService
       .getCurrentSala$()
       .map(sala => sala.idSala)
       .subscribe(x => {
-        this.salaService.idSala = x
+        this.salaService.idSala = x;
       }
       ).unsubscribe();
   }
@@ -58,7 +57,7 @@ export class ReservaItemComponent implements OnInit {
     // const num = 0.128205128205128205128205128205128205;
     // const num = 0.12685;
     const num = 0.131;
-    //console.log("nuevo calculo 0.138 Duracion" ,this.currentReserva.duracion);
+    // console.log("nuevo calculo 0.138 Duracion" ,this.currentReserva.duracion);
     return (this.currentReserva.duracion * num) + '%';
   }
 
@@ -67,7 +66,7 @@ export class ReservaItemComponent implements OnInit {
     // const num = 0.12685;
     // const num = 0.138;
     // console.log("nuevo calculo desde Back", this.currentReserva.minutoDesde);
-    return (this.currentReserva.minutoDesde);// * num);
+    return (this.currentReserva.minutoDesde); // * num);
   }
 
   getReservaColor() {
@@ -75,21 +74,22 @@ export class ReservaItemComponent implements OnInit {
     // color Par
     const colorsEven = ['#1a237e', '#ef5350', '#c62828', '#ec407a', '#ab47bc', '#7e57c2', '#5c6bc0', '#42a5f5', '#29b6f6', '#26c6da', '#26a69a', '#66bb6a', '#9ccc65', '#d4e157', '#ffee58', '#ffca28', '#ffa726', '#ff7043', '#aa00ff', '#6a1b9a'];
     // color Impar
-    const colorsOdd = ['#6a1b9a', '#aa00ff', '#ff7043', '#ffa726', '#ffca28', '#ffee58', '#d4e157', '#9ccc65', '#66bb6a', '#26a69a', '#26c6da', '#29b6f6', '#42a5f5', '#5c6bc0', '#7e57c2', '#ab47bc', '#ec407a', '#c62828', '#ef5350', '#1a237e']
+    const colorsOdd = ['#6a1b9a', '#aa00ff', '#ff7043', '#ffa726', '#ffca28', '#ffee58', '#d4e157', '#9ccc65', '#66bb6a', '#26a69a',
+    '#26c6da', '#29b6f6', '#42a5f5', '#5c6bc0', '#7e57c2', '#ab47bc', '#ec407a', '#c62828', '#ef5350', '#1a237e'];
 
     let color = '';
-    //Si el indice que se pasa es > que el array de colores. Al indice le restamos,
-    //la multiplicación del cociente de la división del indice entre el total de colores, por el total de colores
+    // Si el indice que se pasa es > que el array de colores. Al indice le restamos,
+    // la multiplicación del cociente de la división del indice entre el total de colores, por el total de colores
     if (this.indice > colorsEven.length) {
-      let i = this.indice - ((this.indice / colorsEven.length) * colorsEven.length);
-      //si es par, es divisible por 2
+      const i = this.indice - ((this.indice / colorsEven.length) * colorsEven.length);
+      // si es par, es divisible por 2
       if ((this.indiceSala % 2) === 0) {
         color = colorsEven[i];
       } else {
         color = colorsOdd[i];
       }
     } else {
-      //Si no supera el total de colores, coprobamos si es par o impar.
+      // Si no supera el total de colores, coprobamos si es par o impar.
       if ((this.indiceSala % 2) === 0) {
         color = colorsEven[this.indice];
       } else {

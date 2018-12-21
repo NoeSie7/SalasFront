@@ -7,17 +7,20 @@ import { ValidatorsService } from './core/shared/forms/validators.service';
 
 import { AppComponent } from './app.component';
 import { LayoutModule } from './core/layout/layout.module';
-import { SharedService } from './routes/service/shared.service';
-import { OficinaService } from './routes/service/oficina.service';
-import { ReservaService } from './routes/service/reserva.service';
-import { UsuarioService } from './routes/service/usuario.service';
-import { SalaService } from './routes/service/sala.service';
+import { SharedService } from './components/service/shared.service';
+import { OficinaService } from './components/service/oficina.service';
+import { ReservaService } from './components/service/reserva.service';
+import { UsuarioService } from './components/service/usuario.service';
+import { SalaService } from './components/service/sala.service';
+import {SalasComponent} from './components/salas/salas.component';
 
-import { AppRoutingModule } from './app-routing/app-routing.module';
+import { AppRoutingModule } from './routes/app-routing.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppComponent    
+    AppComponent,
+    SalasComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +29,6 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
     LayoutModule,
     MaterializeModule,
     AppRoutingModule,
-
   ],
   exports: [],
   providers: [FormsToolsService, ValidatorsService, SharedService, OficinaService, ReservaService, UsuarioService, SalaService],

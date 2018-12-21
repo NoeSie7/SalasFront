@@ -21,7 +21,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class DashboardSalasComponent implements OnInit {
 
-  public hours: Array<string> = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+  public hours: Array<string> = ['08:00', '09:00', '10:00', '11:00',
+                                 '12:00', '13:00', '14:00', '15:00',
+                                 '16:00', '17:00', '18:00', '19:00'];
+
   private showSala: Boolean = false;
   private nSala: number;
   @Input() confirmationPopup = new ConfirmationPopup();
@@ -58,6 +61,7 @@ export class DashboardSalasComponent implements OnInit {
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
     this.sharedService.getCurrentOficina$()
       .subscribe(currentOficina => {
+        console.log('CURRENT OFICINA', currentOficina);
         this.currentOficina = currentOficina;
         this.redirigirSinDatos();
         this.loadSalas();
@@ -73,12 +77,15 @@ export class DashboardSalasComponent implements OnInit {
     this.currentSala$ = this.sharedService.getCurrentSala$();
     this.sharedService.getCurrentSala$()
       .subscribe(currentSala => {
+        console.log('CURRENT SALA', currentSala);
+
         this.currentSala = currentSala;
       });
 
     this.currentReserva$ = this.sharedService.getCurrentReserva$();
     this.sharedService.getCurrentReserva$()
       .subscribe(currentReserva => {
+        console.log('CURRENT reserva', currentReserva);
         this.currentReserva = currentReserva;
       });
 
@@ -87,39 +94,50 @@ export class DashboardSalasComponent implements OnInit {
       .subscribe(salas => {
         this.salas = salas;
         // loads reservas of each sala
-        if (!(salas instanceof Observable))
+        if (!(salas instanceof Observable)) {
           salas.forEach(sala => {
-            if (sala.idSala != undefined) {
+            if (sala.idSala !== undefined) {
               this.reservaService.getReservasBySalaAndDate(sala.idSala, this.sharedService.currentDate)
                 .subscribe(responseAux => {
                   if (responseAux.result === 'Success' && responseAux.mensaje === 'Success') {
+
                     this.restarHoras(responseAux.reservaAuxList);
                     sala.reservas = responseAux.reservaAuxList;
                   }
                 });
             }
           });
+        }
       });
   }
+
+  // mostrarSalas() {
+  //   this.salas.forEach( e => console.log(e));
+  // }
+
   redirigirSinDatos() {
-    if (!this.currentOficina.idOficina)
-      this.router.navigate(['']);
+    // if (!this.currentOficina.idOficina) {
+    //   this.router.navigate(['']);
+    // }
   }
   cerrarModalSala() {
     this.showSala ? this.showSala = false : this.showSala = true;
   }
   modalDatosSala(event) {
-    var target = event.target || event.srcElement || event.currentTarget;
+    const target = event.target || event.srcElement || event.currentTarget;
     this.nSala = target.attributes.id.nodeValue;
     this.showSala ? this.showSala = false : this.showSala = true;
   }
-  loadSalas() {
-    if (this.currentOficina.idOficina != undefined)
+  loadSalas() { // cargamos la sala
+    if (this.currentOficina.idOficina !== undefined) {
       this.oficinaService.getSalasByOficina(this.currentOficina.idOficina)
         .subscribe(salas => {
+          console.log('SALAS', salas);
+
           this.sharedService.updateSalas(salas);
           this.oficinaService.updateSalaList(salas);
         });
+    }
   }
 
   closeConfirmation() {
@@ -138,15 +156,14 @@ export class DashboardSalasComponent implements OnInit {
           this.closeConfirmation();
         });
     }else if (this.confirmationPopup.action === 'save' && this.currentReserva.periodic) {
-      this.getToast('','Insertando reservas...',null);
+      this.getToast('', 'Insertando reservas...', null);
       this.reservaService.insertOrUpdateReservas(this.currentReserva)
         .subscribe(response => {
           this.getToast('', response.mensaje, response.result);
 
           this.closeConfirmation();
         });
-    } 
-    else if (this.confirmationPopup.action === 'delete') {
+    }else if (this.confirmationPopup.action === 'delete') {
       this.reservaService.deleteReserva(this.currentReserva.idReserva)
         .subscribe(response => {
           this.getToast('', response.mensaje, response.result);

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { IndexComponent } from './index.component';
-import { IndexRoutingModule } from "./index-routing.module";
+import { IndexRoutingModule } from './index-routing.module';
 import { SharedModule } from '../../core/shared/shared.module';
 
 @NgModule({

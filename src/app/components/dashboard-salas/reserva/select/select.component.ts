@@ -14,18 +14,18 @@ export class SelectComponent {
 
   private flagClass: Boolean = false;
   private showSelect: Boolean = false;
-  private nombreSelect: string = "Selecciona una sala";
+  private nombreSelect: String = 'Selecciona una sala';
   @Output() valorSelect = new EventEmitter<number>();
 
   constructor(private oficinaService: OficinaService, private salaService: SalaService) {
     this.salaService.idSala$.subscribe(id => {
-      let idSalaChange = id
-      if (idSalaChange != 0) {
-        let filtered = this.oficinaService.salasList.filter(sal => sal.idSala == idSalaChange);
+      const idSalaChange = id;
+      if (idSalaChange !== 0) {
+        const filtered = this.oficinaService.salasList.filter(sal => sal.idSala === idSalaChange);
         this.nombreSelect = filtered.map(x => x.nombre)[0];
         this.valorSelect.emit(idSalaChange);
       } else {
-        this.nombreSelect = "Selecciona una sala";
+        this.nombreSelect = 'Selecciona una sala';
       }
     }
     );
@@ -37,8 +37,8 @@ export class SelectComponent {
 
   clickSelectLi(result) {
     this.cambiarFlag();
-    // console.log("Seleccionado", result);
-    console.log(`Click Select ${result.idSala}`)
+    // console.log('Seleccionado', result);
+    console.log(`Click Select ${result.idSala}`);
     this.nombreSelect = result.nombre;
     this.valorSelect.emit(result.idSala);
 

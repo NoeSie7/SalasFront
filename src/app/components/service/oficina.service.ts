@@ -16,9 +16,7 @@ export class OficinaService {
 
   public salasList: Sala[];
 
-  constructor(private http: Http) {
-    
-  }
+  constructor(private http: Http) {  }
 
   getCurrentOficina(): Oficina {
     return this.currentOficina;
@@ -30,13 +28,13 @@ export class OficinaService {
       .map(res => res.json().oficinaList);*/
 
     // api
-    return this.http.get(environment.urlBackBase+'/getAllOficinas')
+    return this.http.get(environment.urlBackBase + '/getAllOficinas')
       .map(res => res.json().oficinaList);
   }
 
   getSalasByOficina(idOficina): Observable<any> {
     // api
-    return this.http.get(environment.urlBackBase+'/getAllSalasByIdOficina/' + idOficina)
+    return this.http.get(environment.urlBackBase + '/getAllSalasByIdOficina/' + idOficina)
       .map(res => res.json().salaList);
   }
 

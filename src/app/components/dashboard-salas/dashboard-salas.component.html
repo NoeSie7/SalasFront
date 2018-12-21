@@ -32,7 +32,8 @@
         <div *ngIf="salas.length > 0">
           <div class="row rooms" *ngFor="let sala of salas; let i = index">
             <div class="col s1 rooms-name" id="{{i}}" (click)="modalDatosSala($event)">
-              {{sala.nombre}}
+              <!-- <router-link>{{sala.nombre}}</router-link> -->
+              <a>{{sala.nombre}}</a>
             </div>
           </div>
         </div>

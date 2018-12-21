@@ -12,7 +12,7 @@ export class ReservaService {
 
   getReservasBySala(idSala): Observable<Reserva[]> {
     // api
-    return this.http.get(environment.urlBackBase+'/getAllReservasByIdSala/' + idSala)
+    return this.http.get(environment.urlBackBase + '/getAllReservasByIdSala/' + idSala)
       .map(res => res.json().reservaAuxList);
   }
 
@@ -100,7 +100,7 @@ export class ReservaService {
     //   .map(res => responseAux);
 
     // api
-    return this.http.get(environment.urlBackBase+'/sala/' + idSala + '/reservas/' + this.getFormatedDateForRest(date))
+    return this.http.get(environment.urlBackBase + '/sala/' + idSala + '/reservas/' + this.getFormatedDateForRest(date))
       .map(res => res.json());
   }
 
@@ -109,7 +109,7 @@ export class ReservaService {
     reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({headers: headers});
-    return this.http.post(environment.urlBackBase+'/insertOrUpdateReserva', JSON.stringify(reserva), options)
+    return this.http.post(environment.urlBackBase + '/insertOrUpdateReserva', JSON.stringify(reserva), options)
       .map(res => res.json());
   }
 
@@ -118,13 +118,13 @@ export class ReservaService {
         reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
         const headers = new Headers({'Content-Type': 'application/json'});
         const options = new RequestOptions({headers: headers});
-        return this.http.post(environment.urlBackBase+'/insertOrUpdateReservas', JSON.stringify(reserva), options)
+        return this.http.post(environment.urlBackBase + '/insertOrUpdateReservas', JSON.stringify(reserva), options)
            .map(res => res.json());
     }
 
   deleteReserva(idReserva): Observable<any> {
     // api
-    return this.http.get(environment.urlBackBase+'/deleteReserva/' + idReserva).map(res => res.json());
+    return this.http.get(environment.urlBackBase + '/deleteReserva/' + idReserva).map(res => res.json());
   }
 
   getFormatedDateForRest(date) {
