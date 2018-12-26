@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
 import { LayoutRoutingModule } from './layout-routing.module';
 import { ShellComponent } from './shell/shell.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
@@ -20,7 +21,7 @@ import { SharedModule } from '../shared/shared.module';
     IndexModule,
     AboutModule,
     DashboardSalasModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [ShellComponent, TopBarComponent, MainContentComponent],
   exports: [ShellComponent]

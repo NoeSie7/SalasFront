@@ -66,8 +66,7 @@ export class DashboardSalasComponent implements OnInit {
 
   ngOnInit() {
     this.showNavbar();
-this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office;
-
+    this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office;
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
     this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
       console.log('CURRENT OFICINA', currentOficina);
@@ -82,11 +81,11 @@ this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office
       this.loadSalas();
     });
 
-    // this.route.params.subscribe(params => {
-    //   console.log(params);
-    //   this.id = params.office;
-    // });
-     this.id = +this.route.snapshot.params.office;
+    //  this.route.params.subscribe(params => {
+    //    console.log(params);
+    //    this.id = params.office;
+    //  });
+      this.id = +this.route.snapshot.params.office;
     console.log('IDSAL', this.id);
 
     this.oficinaService
@@ -101,7 +100,6 @@ this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office
     this.currentSala$ = this.sharedService.getCurrentSala$();
     this.sharedService.getCurrentSala$().subscribe(currentSala => {
       console.log('CURRENT SALA', currentSala);
-
       this.currentSala = currentSala;
     });
 
@@ -111,7 +109,10 @@ this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office
       this.currentReserva = currentReserva;
     });
 
+    console.log('ROOM', this.route.snapshot.params.room);
+
     if (this.route.snapshot.params.room !== undefined) {
+      console.log('PARAM ROUTE', this.route.snapshot.params.room);
 
       this.reservaService.getReservasBySalaAndDate(this.route.snapshot.params.room, this.sharedService.currentDate).subscribe(
         responseAux => {
@@ -128,16 +129,23 @@ this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office
     } else {
       this.salas$ = this.sharedService.getSalas$();
       this.sharedService.getSalas$().subscribe(salas => {
+        // console.log('ELSE SALAS', this.salas$);
         this.salas = salas;
+        console.log('ELSE SALAS', this.salas);
         // loads reservas of each sala
         if (!(salas instanceof Observable)) {
           salas.forEach(sala => {
-            if (sala.idSala !== undefined) {
+            // if (sala.idSala !== undefined) {
+            if (this.route.snapshot.params.office !== undefined) {
               this.reservaService
-                .getReservasBySalaAndDate(
-                  sala.idSala,
-                  this.sharedService.currentDate
-                )
+                //  .getReservasBySalaAndDate(
+                //    sala.idSala,
+                //    this.sharedService.currentDate
+                //  )
+                 .getReservasBySalaAndDate(
+                   this.route.snapshot.params.office,
+                   this.sharedService.currentDate
+                 )
                 .subscribe(responseAux => {
                   if (
                     responseAux.result === 'Success' &&
@@ -152,7 +160,7 @@ this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office
         }
       });
     }
-    this.loadSalas();
+    // this.loadSalas();
      this.currentSala.idSala = +this.route.snapshot.params.room;
   } ////////////////////// ngOnInit()
 
