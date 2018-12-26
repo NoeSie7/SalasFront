@@ -26,10 +26,11 @@ const routes: Routes = [
     // ]
   },
   {
-    path: 'office/:office/room/:idroom/timetable',
+    path: 'office/:office/room/:room/timetable',
     component: DashboardSalasComponent,
   },
-  {path: 'office/:id', component: SalasComponent},
+  // {path: 'office/:id', component: SalasComponent}, // Componente con las rutas a cada sala
+  {path: 'office/:office', component: DashboardSalasComponent}, // Muestra todas las reservas de un lugar
   {path: 'reservaitem', component: ReservaItemComponent}, // caca
   {path: 'reserva', component: ReservaComponent}, // caca
   {path: 'select', component: SelectComponent},
