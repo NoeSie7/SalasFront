@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 import { toast } from 'angular2-materialize';
 import { SalaService } from '../service/sala.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { log } from 'util';
 
 @Component({
   selector: 'app-dashboard-salas',
@@ -85,11 +86,10 @@ export class DashboardSalasComponent implements OnInit {
     //    console.log(params);
     //    this.id = params.office;
     //  });
-      this.id = +this.route.snapshot.params.office;
+    this.id = +this.route.snapshot.params.office;
     console.log('IDSAL', this.id);
 
-    this.oficinaService
-      .getSalasByOficina(this.route.snapshot.params.office) // this.currentOficina.idOficina
+    this.oficinaService.getSalasByOficina(this.id) // this.currentOficina.idOficina
       .subscribe(salas => {
         console.log('SALAS', salas);
         this.salas = salas;
@@ -114,20 +114,46 @@ export class DashboardSalasComponent implements OnInit {
     if (this.route.snapshot.params.room !== undefined) {
       console.log('PARAM ROUTE', this.route.snapshot.params.room);
 
-      this.reservaService.getReservasBySalaAndDate(this.route.snapshot.params.room, this.sharedService.currentDate).subscribe(
-        responseAux => {
-          if (
-            responseAux.result === 'Success' &&
-            responseAux.mensaje === 'Success'
-          ) {
-            this.restarHoras(responseAux.reservaAuxList);
-            this.currentSala.reservas = responseAux.reservaAuxList;
-            this.salas.push(this.currentSala);
+       this.reservaService
+         .getReservasBySalaAndDate(
+           this.route.snapshot.params.room,
+           this.sharedService.currentDate
+         )
+         .subscribe(responseAux => {
+           console.log('RESPONSEAUX', responseAux);
+           if (
+             responseAux.result === 'Success' &&
+             responseAux.mensaje === 'Success'
+           ) {
+             this.restarHoras(responseAux.reservaAuxList);
+             this.currentSala.reservas = responseAux.reservaAuxList;
+              console.log('RESERVA', this.currentSala.reservas);
+              console.log('CURRENT SALA RESERVA', this.currentSala);
+
+             // this.salas = [];
+            //  console.log('QUELOQIE', );
+            this.salas.forEach( e => {
+               console.log('E1', e);
+              // console.log(this.route.snapshot.params.room);
+              if (e.idSala === +this.route.snapshot.params.room) {
+                 console.log('E2', e);
+                  // console.log('E3', this.salas.push(e.reservas = responseAux.reservaAuxList));
+                    this.salas = [];
+                    this.salas.push(e);
+              }
+            });
+             // this.salas.push(this.currentSala);
+           } else {
+            console.log('No ha habido coincidencias');
+            this.salas = [];
+            this.getToast('ADVERTENCIA:', 'Aun NO hay reservas para esta Sala...', null);
           }
-        }
-      );
+         });
+
     } else {
       this.salas$ = this.sharedService.getSalas$();
+      console.log('SALAS$', this.salas$);
+
       this.sharedService.getSalas$().subscribe(salas => {
         // console.log('ELSE SALAS', this.salas$);
         this.salas = salas;
@@ -135,17 +161,19 @@ export class DashboardSalasComponent implements OnInit {
         // loads reservas of each sala
         if (!(salas instanceof Observable)) {
           salas.forEach(sala => {
-            // if (sala.idSala !== undefined) {
-            if (this.route.snapshot.params.office !== undefined) {
+
+              console.log('FOREACH', sala);
+              if (sala.idSala !== undefined) {
+            // if (this.route.snapshot.params.office !== undefined) {
               this.reservaService
                 //  .getReservasBySalaAndDate(
                 //    sala.idSala,
                 //    this.sharedService.currentDate
                 //  )
-                 .getReservasBySalaAndDate(
-                   this.route.snapshot.params.office,
-                   this.sharedService.currentDate
-                 )
+                .getReservasBySalaAndDate(
+                  sala.idSala,
+                  this.sharedService.currentDate
+                )
                 .subscribe(responseAux => {
                   if (
                     responseAux.result === 'Success' &&
@@ -161,7 +189,7 @@ export class DashboardSalasComponent implements OnInit {
       });
     }
     // this.loadSalas();
-     this.currentSala.idSala = +this.route.snapshot.params.room;
+    this.currentSala.idSala = +this.route.snapshot.params.room;
   } ////////////////////// ngOnInit()
 
   // mostrarSalas() {
@@ -180,7 +208,7 @@ export class DashboardSalasComponent implements OnInit {
     console.log('Event', event);
 
     const target = event.target || event.srcElement || event.currentTarget;
-     this.nSala = target.attributes.id.nodeValue;
+    this.nSala = target.attributes.id.nodeValue;
 
     this.showSala ? (this.showSala = false) : (this.showSala = true);
   }

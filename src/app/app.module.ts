@@ -16,11 +16,14 @@ import {SalasComponent} from './components/salas/salas.component';
 
 import { AppRoutingModule } from './routes/app-routing.module';
 import { RouterModule } from '@angular/router';
+import { TimetableComponent } from './components/timetable/timetable.component';
+import { FullCalendarModule } from 'ng-fullcalendar';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    SalasComponent
+    TimetableComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +32,7 @@ import { RouterModule } from '@angular/router';
     LayoutModule,
     MaterializeModule,
     AppRoutingModule,
+    FullCalendarModule
   ],
   exports: [],
   providers: [FormsToolsService, ValidatorsService, SharedService, OficinaService, ReservaService, UsuarioService, SalaService],
