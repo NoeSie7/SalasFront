@@ -1,6 +1,16 @@
-<div class="container card-panel ">
-    <div *ngIf="calendarOptions">
+
+  <div class="row" id="agenda">
+      <div *ngIf="salas.length > 0">
+          <div class="row rooms" *ngFor="let sala of salas; let i = index">
+            <div class="col s12 rooms-name" *ngIf="numberroom == sala.idSala">
+              <h1 id="{{i}}">{{sala.nombre}} </h1>
+              <h2>{{room}}</h2>
+            </div>
+          </div>
+        </div>
+    <div *ngIf="calendarOptions" id="calendario" class="col s12 m8 l9">
         <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
             (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
     </div>
-</div>
+  </div>
+
