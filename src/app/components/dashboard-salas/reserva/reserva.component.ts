@@ -97,6 +97,14 @@ export class ReservaComponent implements OnInit {
     if (this.valorSelect == undefined)
       this.valorSelect = this.currentReserva.idSala;
   }
+
+  ngDoCheck() {
+    /*if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
+      this.currentReserva.idSala = 3;
+      this.sharedService.checkAvailability(this.currentReserva);
+    }*/
+  }
+
   valorSelected(valor: number) {
     this.valorSelect = valor;
     this.reservaForm.get('idSala').setValue(valor);
@@ -184,7 +192,7 @@ export class ReservaComponent implements OnInit {
         periodicTime: reserva.periodicTime,
         horaDesde: reserva.horaDesde,
         horaHasta: reserva.horaHasta,
-        asunto: reserva.asunto != null ? reserva.asunto : ''
+        asunto: reserva.asunto != null ? reserva.asunto : 'Reserva de sala'
       });
     }
   }
@@ -335,11 +343,23 @@ export class ReservaComponent implements OnInit {
     this.sharedService.updateStartHour(this.currentHoraDesde);
 
     this.onClickHoraHastaAttachObserbableToAdd30();
+
+    if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
+      this.currentReserva.idSala = 3;
+      this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva);
+    }
+
   }
 
   searchDateReservaHastaChange() {
     this.currentHoraHasta = document.getElementById('search-date-hasta-input').getAttribute('value');
     this.sharedService.updateEndHour(this.currentHoraHasta);
+
+    if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
+      this.currentReserva.idSala = 3;
+      this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva);
+    }
+
   }
 
   // loadSalas() {

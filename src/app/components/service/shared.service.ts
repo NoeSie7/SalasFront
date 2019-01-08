@@ -172,6 +172,8 @@ export class SharedService {
     // reserva.fecha = this.getCurrentDateForHtml();
     // reserva.horaDesde = this.getCurrentHoraDesde();
     // reserva.horaHasta = this.getCurrentHoraHasta();
+
+    if(reserva.asunto=="") reserva.asunto = "Reserva de sala"
     this.currentReserva = reserva;
     this.emitCurrentReserva();
   }
@@ -222,4 +224,5 @@ export class SharedService {
 
     return `${dayString}/${monthString}/${year}`;
   }
+
 }

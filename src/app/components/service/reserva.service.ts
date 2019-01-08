@@ -151,4 +151,24 @@ export class ReservaService {
     }
   }
 
+  checkAvailability(h1, h2, reserva) {
+    console.log("llamar servicio comprobar disponibilidad");
+    
+    reserva.horaDesde = h1;
+    reserva.horaHasta = h2;
+    
+
+    console.log(reserva.idSala);
+    console.log(reserva.horaDesde);
+    console.log(reserva.horaHasta);
+    console.log(reserva);
+
+    reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const options = new RequestOptions({headers: headers});
+    return this.http.post(environment.urlBackBase + '/checkAvailability', JSON.stringify(reserva), options)
+    .map(res => { console.log(res); res.json()});
+
+  }
+
 }
