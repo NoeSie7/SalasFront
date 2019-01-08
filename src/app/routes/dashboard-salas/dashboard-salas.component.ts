@@ -102,8 +102,8 @@ export class DashboardSalasComponent implements OnInit {
       });
   }
   redirigirSinDatos() {
-    if (!this.currentOficina.idOficina)
-      this.router.navigate(['']);
+/*     if (!this.currentOficina.idOficina)
+      this.router.navigate(['']); */
   }
   cerrarModalSala() {
     this.showSala ? this.showSala = false : this.showSala = true;
@@ -145,7 +145,7 @@ export class DashboardSalasComponent implements OnInit {
 
           this.closeConfirmation();
         });
-    } 
+    }
     else if (this.confirmationPopup.action === 'delete') {
       this.reservaService.deleteReserva(this.currentReserva.idReserva)
         .subscribe(response => {
