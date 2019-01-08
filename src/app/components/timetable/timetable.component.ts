@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
-import { CalendarComponent } from 'ng-fullcalendar';
-import { Options } from 'fullcalendar';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { toast } from 'angular2-materialize';
+import { OptionsInput } from 'fullcalendar';
 // import moment = require('moment');
 import * as moment from 'moment';
-import { ActivatedRoute } from '@angular/router';
-import { SharedService } from '../service/shared.service';
-import { ReservaService } from '../service/reserva.service';
-import { Sala } from '../_data/sala.model';
+import { CalendarComponent } from 'ng-fullcalendar';
 import { Observable } from 'rxjs';
-import { toast } from 'angular2-materialize';
 import { OficinaService } from '../service/oficina.service';
+import { ReservaService } from '../service/reserva.service';
+import { SharedService } from '../service/shared.service';
+import { Sala } from '../_data/sala.model';
+
 
 @Component({
   selector: 'app-timetable',
@@ -18,7 +19,7 @@ import { OficinaService } from '../service/oficina.service';
 })
 export class TimetableComponent implements OnInit {
 
-  private calendarOptions: Options;
+  private calendarOptions: OptionsInput;
   private date: Date;
   private events = [];
 
@@ -35,20 +36,24 @@ export class TimetableComponent implements OnInit {
    @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
    constructor(private route: ActivatedRoute,
-    private sharedService: SharedService,
     private reservaService: ReservaService,
     private oficinaService: OficinaService) {}
 
    ngOnInit() {
 
      this.calendarOptions = {
-        editable: true,
+       height:'auto',
+       titleFormat:'DD/MM/YYYY',
+        editable: false,
         eventLimit: true,
         header: {
           left: '',
           center: 'title',
-          right: 'prev,next',
+          right:''
           // right: 'month,agendaWeek,agendaDay,listMonth, basicWeek'
+        },
+        footer:{
+          center: 'prev,next',
         },
         businessHours: {
           dow: [1, 2, 3, 4, 5],
@@ -58,9 +63,6 @@ export class TimetableComponent implements OnInit {
         allDaySlot: false, // elimina casilla de alldays
         weekends: false,
         events: this.events,
-        // eventColor: '#3498DB',
-        // eventBackgroundColor: 'yellow',
-        // eventTextColor: 'green',
         defaultView: 'agendaWeek',
         locale: 'es', // Idioma del calendario
         minTime: moment.duration('07:00:00'), // Duracion generica del calendario
@@ -74,58 +76,12 @@ export class TimetableComponent implements OnInit {
      }
 
       loadEvents() {
-        // console.log();
           this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe( res => {
             console.log('RES', res);
               this.salas = res;
           });
           this.numberroom = this.route.snapshot.params.room;
 
-        // if (this.route.snapshot.params.room !== undefined) {
-
-        //    this.reservaService
-        //      .getReservasBySalaAndDate(
-        //        this.route.snapshot.params.room,
-        //        this.sharedService.currentDate
-        //      )
-        //      .subscribe(responseAux => {
-        //        console.log('RESPONSEAUX', responseAux);
-        //        if (
-        //          responseAux.result === 'Success' &&
-        //          responseAux.mensaje === 'Success'
-        //        ) {
-        //         //  console.log('HORAS', this.restarHoras(responseAux.reservaAuxList));
-        //          this.restarHoras(responseAux.reservaAuxList);
-        //          this.currentSala.reservas = responseAux.reservaAuxList;
-        //           //  console.log('RESERVA', this.currentSala.reservas);
-        //           //  console.log('CURRENT SALA RESERVA', this.currentSala);
-
-        //           this.currentSala.reservas.forEach(e => {
-        //             const dateinicio = new Date(this.convertHoras(e.fecha)
-        //             + ' ' +  e.horaDesde);
-        //             const datefin = new Date(this.convertHoras(e.fecha)
-        //             + ' ' +  e.horaHasta);
-
-        //             console.log('parseo', dateinicio);
-
-        //             const el = {
-        //             start: dateinicio,
-        //             title: e.asunto,
-        //             end: datefin,
-        //             };
-        //             console.log('ELEMENTO', el);
-
-        //             this.events.push(el);
-        //                               });
-
-        //        } else {
-        //         console.log('No ha habido coincidencias');
-        //         this.salas = [];
-        //         this.getToast('ADVERTENCIA:', 'Aun NO hay reservas para esta Sala...', null);
-        //       }
-        //      });
-
-        // }
         if (this.route.snapshot.params.room !== undefined) {
 
           this.reservaService
@@ -208,37 +164,6 @@ export class TimetableComponent implements OnInit {
 
      clickButton(model: any) {
        console.log('Modl', model);
-       // this.events = model;
         this.loadEvents();
       }
-    // eventClick(model: any) {
-    //   model = {
-    //     event: {
-    //       id: model.event.id,
-    //       start: model.event.start,
-    //       end: model.event.end,
-    //       title: model.event.title,
-    //       allDay: model.event.allDay
-    //       // other params
-    //     },
-    //     duration: {}
-    //   }
-    //   this.displayEvent = model;
-    // }
-    // updateEvent(model: any) {
-    //   model = {
-    //     event: {
-    //       id: model.event.id,
-    //       start: model.event.start,
-    //       end: model.event.end,
-    //       title: model.event.title
-    //       // other params
-    //     },
-    //     duration: {
-    //       _data: model.duration._data
-    //     }
-    //   }
-    //   this.displayEvent = model;
-    // }
-
 }

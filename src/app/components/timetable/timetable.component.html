@@ -1,15 +1,15 @@
-
-  <div class="row" id="agenda">
-      <div *ngIf="salas.length > 0">
-          <div class="row rooms" *ngFor="let sala of salas; let i = index">
-            <div class="col s12 rooms-name" *ngIf="numberroom == sala.idSala">
-              <h1 id="{{i}}">{{sala.nombre}} </h1>
-            </div>
-          </div>
+<div class="row" id="agenda">
+  <div *ngIf="salas.length > 0">
+      <div class="row rooms" *ngFor="let sala of salas; let i = index">
+        <div class="col s12 rooms-name" *ngIf="numberroom == sala.idSala">
+          <h3 id="{{i}}">{{sala.nombre}} </h3>
         </div>
-    <div *ngIf="calendarOptions" id="calendario" class="col s12 m8 l9">
+      </div>
+    </div>
+    <!--se usa para centrar el calendario en dispositivos grandes-->
+    <section class="col s0 l2"></section>
+    <div *ngIf="calendarOptions" id="calendario" class="col l8 s12">
         <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
             (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
     </div>
-  </div>
-
+</div>
