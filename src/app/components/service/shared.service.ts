@@ -156,10 +156,10 @@ export class SharedService {
     this.emitCurrentSala();
   }
 
-  updateCurrentReserva(reserva) {
+  updateCurrentReserva(reserva, idSala: number = 0) {
     if (reserva == null && this.currentSala != null) {
       reserva = new Reserva();
-      reserva.idSala = 0;
+      reserva.idSala = idSala;
       reserva.fecha = this.getCurrentDate();
       reserva.horaDesde = this.getCurrentHoraDesde();
       reserva.horaHasta = this.getCurrentHoraHasta();

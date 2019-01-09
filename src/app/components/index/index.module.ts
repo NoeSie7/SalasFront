@@ -7,13 +7,14 @@ import { IndexComponent } from './index.component';
 import { IndexRoutingModule } from './index-routing.module';
 import { SharedModule } from '../../core/shared/shared.module';
 
+
 @NgModule({
   imports: [
     CommonModule,
     IndexRoutingModule,
     FormsModule,
     HttpModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     IndexComponent

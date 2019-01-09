@@ -102,35 +102,41 @@
             <textarea *ngIf="!sharedService.isConsulting" id="asunto" type="text" class="materialize-textarea" maxlength="250" formControlName="asunto"></textarea>
             <label [ngClass]="{'active': currentReserva.asunto?.length > 0 }" for="asunto">Asunto</label>
           </div>
-       
+
           <div class="switch col s2">
               <label>
-                <i class="material-icons">alarm_off</i>                
+                <i class="material-icons">alarm_off</i>
                 <input type="checkbox" id="periodic" formControlName="periodic" [ngClass]="{'active': currentReserva.periodic?.length > 0 }">
                 <span class="lever"></span>
                 <i class="material-icons">alarm_on</i>
                 Reserva Periodica
               </label>
-            
+
           </div>
             <!-- Periodic time -->
           <div *ngIf="reservaForm.get('periodic').value" class="input-field col s4">
               <i class="material-icons prefix">repeat</i>
               <input id="periodicTime" type="text" class="validate"  formControlName="periodicTime" pattern="[0-9]*" min="1" max="10" maxlength="2">
               <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime" >Tiempo de la repeticion en dias</label>
-              
+
+            </div>
+            <div class="col s12" *ngIf="!sharedService.isConsulting">
+              <button id="button-action-save" type="submit" (click)="save()" value="Guardar" [disabled]="!reservaForm.valid" data-target="modalConfirmation"
+                       class="btn modal-trigger waves-effect waves-light">Guardar</button>
+              <button *ngIf="this.isPresentNodeDomNew()" id="button-action-delete" (click)="delete()" value="Eliminar" data-target="modalConfirmation"
+                      class="btn modal-trigger waves-effect waves-light">Eliminar</button>
             </div>
         </div>
 
       </div>
     </div>
     <!-- footer -->
-    <div class="modal-footer" *ngIf="!sharedService.isConsulting">
+    <!-- <div class="modal-footer" *ngIf="!sharedService.isConsulting">
        <button *ngIf="this.isPresentNodeDomNew()" id="button-action-delete" (click)="delete()" value="Eliminar" data-target="modalConfirmation"
         class="btn modal-trigger waves-effect waves-light">Eliminar</button>
       <button id="button-action-save" type="submit" (click)="save()" value="Guardar" [disabled]="!reservaForm.valid" data-target="modalConfirmation"
         class="btn modal-trigger waves-effect waves-light">Guardar</button>
-    </div>
+    </div> -->
     <button value="Cancelar" class="discard modal-close btn waves-effect waves-light">X</button>
   </div>
 </form>

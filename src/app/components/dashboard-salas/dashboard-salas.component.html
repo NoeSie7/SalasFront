@@ -1,7 +1,7 @@
-<div class="container card-panel">
-  <div class="container">
+<div class="container card-panel ">
+  <div  class="container">
     <div class="row">
-      <div class="col s1"></div>
+      <div class="col s1 "></div>
       <div class="col s1 timeline-hour" *ngFor="let hour of hours">
         <span>{{hour}}</span>
       </div>
@@ -31,9 +31,8 @@
         </div>
         <div *ngIf="salas.length > 0">
           <div class="row rooms" *ngFor="let sala of salas; let i = index">
-            <div class="col s1 rooms-name" id="{{i}}" (click)="modalDatosSala($event)">
-              <!-- <router-link>{{sala.nombre}}</router-link> -->
-              <a>{{sala.nombre}}</a>
+            <div class="col s1 rooms-name" id="{{id}}" (click)="modalDatosSala($event)">
+              <a id="{{i}}">{{sala.nombre}}</a>
             </div>
           </div>
         </div>

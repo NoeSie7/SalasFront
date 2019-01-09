@@ -12,6 +12,7 @@ import {SelectComponent} from '../components/dashboard-salas/reserva/select/sele
 import {ConfirmationPopupComponent} from '../components/confirmation-popup/confirmation-popup.component';
 import {AboutComponent} from '../components/about/about.component';
 import { SalasComponent } from '../components/salas/salas.component';
+import { TimetableComponent } from '../components/timetable/timetable.component';
 
 
 const routes: Routes = [
@@ -25,11 +26,19 @@ const routes: Routes = [
     //   },
     // ]
   },
+
+  // {
+  //   path: 'office/:office/room/:room/timetable',
+  //   component: DashboardSalasComponent,
+  // },
+
   {
-    path: 'office/:office/room/:idroom/timetable',
-    component: DashboardSalasComponent,
+    path: 'office/:office/room/:room/timetable',
+    component: TimetableComponent,
   },
-  {path: 'office/:id', component: SalasComponent},
+
+  // {path: 'office/:id', component: SalasComponent}, // Componente con las rutas a cada sala
+  {path: 'office/:office', component: DashboardSalasComponent}, // Muestra todas las reservas de un lugar
   {path: 'reservaitem', component: ReservaItemComponent}, // caca
   {path: 'reserva', component: ReservaComponent}, // caca
   {path: 'select', component: SelectComponent},

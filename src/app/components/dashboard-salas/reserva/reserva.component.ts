@@ -71,8 +71,6 @@ export class ReservaComponent implements OnInit {
     //         "detalle": "Ourense - Sala 3",
     //         "reservas":[]
     //       }];
-
-
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
     this.sharedService.getCurrentOficina$()
       .subscribe(currentOficina => {
@@ -97,8 +95,9 @@ export class ReservaComponent implements OnInit {
     // builds form controls
     this.buildForm();
 
-    if (this.valorSelect == undefined)
+    if (this.valorSelect === undefined) {
       this.valorSelect = this.currentReserva.idSala;
+    }
   }
 
   ngDoCheck() {
@@ -126,6 +125,8 @@ export class ReservaComponent implements OnInit {
   }
 
   initControls() {
+    console.log('susolandia', this.currentReserva);
+
     const controls = {
       idReserva: [
         this.currentReserva.idReserva
@@ -147,7 +148,7 @@ export class ReservaComponent implements OnInit {
       periodic: [
         this.currentReserva.periodic
       ],
-      periodicTime:[
+      periodicTime: [
         this.currentReserva.periodicTime
       ],
       extension: [
@@ -214,10 +215,10 @@ export class ReservaComponent implements OnInit {
     retVal.usuario.email = this.reservaForm.get('email').value;
     retVal.usuario.extension = this.reservaForm.get('extension').value;
     retVal.fecha = this.reservaForm.get('fecha').value;
-    if(this.reservaForm.get('periodic').value){
-    retVal.periodic = true;    
+    if (this.reservaForm.get('periodic').value) {
+    retVal.periodic = true;
     retVal.periodicTime = this.reservaForm.get('periodicTime').value;
-    }else{
+    }else {
       retVal.periodic = false;
       retVal.periodicTime = 0;
     }
@@ -268,12 +269,12 @@ export class ReservaComponent implements OnInit {
         email: selectedUsuario.email,
         extension: selectedUsuario.extension
       });
-      let lblEmail = document.getElementById("lblemail");
-      lblEmail.className += " active";
-      let lblExtension = document.getElementById("lblextension");
-      lblExtension.className += " active";
-      let lblEmpleado = document.getElementById("lblempleado");
-      lblEmpleado.className += " active";
+      const lblEmail = document.getElementById('lblemail');
+      lblEmail.className += 'active';
+      const lblExtension = document.getElementById('lblextension');
+      lblExtension.className += 'active';
+      const lblEmpleado = document.getElementById('lblempleado');
+      lblEmpleado.className += ' active';
     }
     this.usuariosList = new Array<Usuario>();
   }
@@ -290,8 +291,9 @@ export class ReservaComponent implements OnInit {
       confirmation.action = '';
       confirmation.active = false;
       this.confirmationPopupChange.emit(confirmation);
-    }else if(this.currentReserva.periodic && (this.currentReserva.periodicTime >10 || this.currentReserva.periodicTime <=0 || this.currentReserva.periodicTime == null)){
-      //opens confirmation dialog
+    } else if (this.currentReserva.periodic && (this.currentReserva.periodicTime > 10
+                || this.currentReserva.periodicTime <= 0 || this.currentReserva.periodicTime === null)) {
+      // opens confirmation dialog
       const confirmation = new ConfirmationPopup();
       confirmation.title = 'Reserva Periodica incorrecta';
       confirmation.message = 'Inserte la repeticion de la reserva hasta un máximo de 10 dias laborables';
@@ -305,11 +307,11 @@ export class ReservaComponent implements OnInit {
       confirmation.message = '¿Está seguro que desea guardar los cambios?';
       confirmation.action = 'save';
       confirmation.active = true;
-      
+
       this.confirmationPopupChange.emit(confirmation);
     }
   }
-  
+
     delete() {
       // this.sharedService.isConsulting = false;
       // updates reserva object with selected
@@ -322,7 +324,7 @@ export class ReservaComponent implements OnInit {
       confirmation.active = true;
       this.confirmationPopupChange.emit(confirmation);
     }
-   
+
 
   getCurrentDate() {
     return this.sharedService.getCurrentDate();
@@ -414,16 +416,16 @@ export class ReservaComponent implements OnInit {
   }
 
   private addThirtyMinutes(date: string): string {
-    let copy = this.parseStringToDate(date);
-    let minutes = copy.getMinutes();
+    const copy = this.parseStringToDate(date);
+    const minutes = copy.getMinutes();
     copy.setMinutes(minutes + 30);
 
     return copy.toTimeString().substr(0, 5);
   }
 
   private parseStringToDate(str: string): Date {
-    let [hour, minutes] = str.split(":");
-    let date = new Date();
+    const[hour, minutes] = str.split(':');
+    const date = new Date();
 
     date.setHours(Number.parseInt(hour));
     date.setMinutes(Number.parseInt(minutes));
@@ -432,7 +434,7 @@ export class ReservaComponent implements OnInit {
   }
 
   private isPresentNodeDomNew(): boolean {
-    let elementNew = document.getElementsByClassName("new")[0];
+    const elementNew = document.getElementsByClassName('new')[0];
 
     return elementNew == null ? true : false;
   }
@@ -446,9 +448,10 @@ export class ReservaComponent implements OnInit {
   }
 
   showIdSalaView() {
-    if (this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value == 0)
-      return true;
-    else
-      return false;
+  // if (this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0){
+  //   return true;
+  // } else
+  //     return false;
+       return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
   }
 }
