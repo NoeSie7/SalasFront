@@ -173,7 +173,7 @@ export class SharedService {
     // reserva.horaDesde = this.getCurrentHoraDesde();
     // reserva.horaHasta = this.getCurrentHoraHasta();
 
-    if(reserva.asunto=="") reserva.asunto = "Reserva de sala"
+    if(reserva.asunto == null || reserva.asunto == "") reserva.asunto = "Reserva de sala"
     this.currentReserva = reserva;
     this.emitCurrentReserva();
   }
