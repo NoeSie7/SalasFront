@@ -1,19 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { ValidatorsService } from '../../../core/shared/forms/validators.service';
-import { FormsToolsService } from '../../../core/shared/forms/forms-tools.service';
-import { Observable } from 'rxjs/Observable';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { toast } from "angular2-materialize";
 import { Subscription } from 'rxjs';
-
-import { Oficina } from '../../_data/oficina.model';
-import { Sala } from '../../_data/sala.model';
-import { Reserva } from '../../_data/reserva.model';
-import { Usuario } from '../../_data/usuario.model';
-import { SharedService } from '../../service/shared.service';
-import { ReservaService } from '../../service/reserva.service';
-import { UsuarioService } from '../../service/usuario.service';
-import { OficinaService } from '../../service/oficina.service';
+import { Observable } from 'rxjs/Observable';
+import { FormsToolsService } from '../../../core/shared/forms/forms-tools.service';
+import { ValidatorsService } from '../../../core/shared/forms/validators.service';
 import { ConfirmationPopup } from '../../confirmation-popup/confirmation-popup.model';
+import { OficinaService } from '../../service/oficina.service';
+import { ReservaService } from '../../service/reserva.service';
+import { SharedService } from '../../service/shared.service';
+import { UsuarioService } from '../../service/usuario.service';
+import { Oficina } from '../../_data/oficina.model';
+import { Reserva } from '../../_data/reserva.model';
+import { Sala } from '../../_data/sala.model';
+import { Usuario } from '../../_data/usuario.model';
+
 
 @Component({
   selector: 'app-reserva',
@@ -41,6 +42,8 @@ export class ReservaComponent implements OnInit {
   @Input() currentHoraDesde = '';
   public currentHoraDesde$: Observable<string>;
   @Input() currentHoraHasta = '';
+
+  public flag = true;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -108,6 +111,11 @@ export class ReservaComponent implements OnInit {
   valorSelected(valor: number) {
     this.valorSelect = valor;
     this.reservaForm.get('idSala').setValue(valor);
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+
+      this.currentReservationData();
+    }
+    this.flag = true;
   }
   buildForm() {
     // initialize form controls
@@ -337,6 +345,32 @@ export class ReservaComponent implements OnInit {
     this.sharedService.updateStartHour(this.searchDateReservaInput);
 
   }
+  getToast(info, mensaje, action) {
+    const message = `${info} ${mensaje}`;
+    const toastStr = `<span>${message}</span>`;
+    toast(toastStr, 3000, action); 
+  }
+
+  currentReservationData() {
+    this.currentReserva.idSala = this.reservaForm.get('idSala').value;
+
+    if(this.currentReserva.idSala == 0) {
+      this.getToast('','Debe elegir una sala para comprobar disponibilidad',null);
+    }
+
+    this.currentReserva.fecha = this.reservaForm.get('fecha').value;
+
+    this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva).subscribe(e => {
+      console.warn(e);
+      if((!e) && (this.flag)){
+        this.flag = false;
+        this.getToast('','La sala no esta disponible para esas horas',null);
+      }
+    },
+    error => {
+      console.error(`error al encontrar peticion ${error}`);
+    });
+  }
 
   searchDateReservaDesdeChange() {
     this.currentHoraDesde = document.getElementById('search-date-desde-input').getAttribute('value');
@@ -344,9 +378,10 @@ export class ReservaComponent implements OnInit {
 
     this.onClickHoraHastaAttachObserbableToAdd30();
 
-    if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
-      this.currentReserva.idSala = 3;
-      this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva);
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+
+      this.currentReservationData();
+      
     }
 
   }
@@ -355,9 +390,10 @@ export class ReservaComponent implements OnInit {
     this.currentHoraHasta = document.getElementById('search-date-hasta-input').getAttribute('value');
     this.sharedService.updateEndHour(this.currentHoraHasta);
 
-    if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
-      this.currentReserva.idSala = 3;
-      this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva);
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+
+      this.currentReservationData();
+      this.flag = true;
     }
 
   }
