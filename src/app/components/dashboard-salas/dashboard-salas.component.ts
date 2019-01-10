@@ -63,7 +63,7 @@ export class DashboardSalasComponent implements OnInit {
     private oficinaService: OficinaService,
     private reservaService: ReservaService,
     private salaService: SalaService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.showNavbar();
@@ -82,10 +82,6 @@ export class DashboardSalasComponent implements OnInit {
       this.loadSalas();
     });
 
-    //  this.route.params.subscribe(params => {
-    //    console.log(params);
-    //    this.id = params.office;
-    //  });
     this.id = +this.route.snapshot.params.office;
     console.log('IDSAL', this.id);
 
@@ -114,62 +110,51 @@ export class DashboardSalasComponent implements OnInit {
     if (this.route.snapshot.params.room !== undefined) {
       console.log('PARAM ROUTE', this.route.snapshot.params.room);
 
-       this.reservaService
-         .getReservasBySalaAndDate(
-           this.route.snapshot.params.room,
-           this.sharedService.currentDate
-         )
-         .subscribe(responseAux => {
-           console.log('RESPONSEAUX', responseAux);
-           if (
-             responseAux.result === 'Success' &&
-             responseAux.mensaje === 'Success'
-           ) {
-             this.restarHoras(responseAux.reservaAuxList);
-             this.currentSala.reservas = responseAux.reservaAuxList;
-              console.log('RESERVA', this.currentSala.reservas);
-              console.log('CURRENT SALA RESERVA', this.currentSala);
+      this.reservaService
+        .getReservasBySalaAndDate(
+          this.route.snapshot.params.room,
+          this.sharedService.currentDate
+        )
+        .subscribe(responseAux => {
+          console.log('RESPONSEAUX', responseAux);
+          if (
+            responseAux.result === 'Success' &&
+            responseAux.mensaje === 'Success'
+          ) {
+            this.restarHoras(responseAux.reservaAuxList);
+            this.currentSala.reservas = responseAux.reservaAuxList;
+            console.log('RESERVA', this.currentSala.reservas);
+            console.log('CURRENT SALA RESERVA', this.currentSala);
 
-             // this.salas = [];
-            //  console.log('QUELOQIE', );
-            this.salas.forEach( e => {
-               console.log('E1', e);
-              // console.log(this.route.snapshot.params.room);
+            this.salas.forEach(e => {
+              console.log('E1', e);
               if (e.idSala === +this.route.snapshot.params.room) {
-                 console.log('E2', e);
-                  // console.log('E3', this.salas.push(e.reservas = responseAux.reservaAuxList));
-                    this.salas = [];
-                    this.salas.push(e);
+                console.log('E2', e);
+                this.salas = [];
+                this.salas.push(e);
               }
             });
-             // this.salas.push(this.currentSala);
-           } else {
+          } else {
             console.log('No ha habido coincidencias');
             this.salas = [];
             this.getToast('ADVERTENCIA:', 'Aun NO hay reservas para esta Sala...', null);
           }
-         });
+        });
 
     } else {
       this.salas$ = this.sharedService.getSalas$();
       console.log('SALAS$', this.salas$);
 
       this.sharedService.getSalas$().subscribe(salas => {
-        // console.log('ELSE SALAS', this.salas$);
         this.salas = salas;
         console.log('ELSE SALAS', this.salas);
         // loads reservas of each sala
         if (!(salas instanceof Observable)) {
           salas.forEach(sala => {
 
-              console.log('FOREACH', sala);
-              if (sala.idSala !== undefined) {
-            // if (this.route.snapshot.params.office !== undefined) {
+            console.log('FOREACH', sala);
+            if (sala.idSala !== undefined) {
               this.reservaService
-                //  .getReservasBySalaAndDate(
-                //    sala.idSala,
-                //    this.sharedService.currentDate
-                //  )
                 .getReservasBySalaAndDate(
                   sala.idSala,
                   this.sharedService.currentDate
@@ -188,13 +173,8 @@ export class DashboardSalasComponent implements OnInit {
         }
       });
     }
-    // this.loadSalas();
     this.currentSala.idSala = +this.route.snapshot.params.room;
   } ////////////////////// ngOnInit()
-
-  // mostrarSalas() {
-  //   this.salas.forEach( e => console.log(e));
-  // }
 
   redirigirSinDatos() {
     // if (!this.currentOficina.idOficina) {
@@ -216,7 +196,6 @@ export class DashboardSalasComponent implements OnInit {
     // cargamos la sala
     if (this.currentOficina.idOficina !== undefined) {
       this.oficinaService
-        // .getSalasByOficina(this.currentOficina.idOficina)
         .getSalasByOficina(+this.route.snapshot.params.office)
         .subscribe(salas => {
           console.log('SALAS', salas);
@@ -276,21 +255,13 @@ export class DashboardSalasComponent implements OnInit {
     this.confirmationPopup.active = false;
   }
 
-  newReserva(selectedSala) {
+  newReserva() {
     this.salaService.idSala = 0;
-    // this.sharedService.isConsulting = false;
-    // this.sharedService.updateCurrentSala(selectedSala);
-    this.sharedService.updateCurrentReserva(
-      null,
-      +this.route.snapshot.params.office
-    );
+    this.sharedService.updateCurrentReserva(null, +this.route.snapshot.params.office);
   }
 
   showNavbar() {
-    // // gets the navbar element
-    // const nav = document.getElementById('app-nav-bar');
-    // // shows the navbar
-    // nav.style.display = 'block';
+    // gets the navbar element
     $('#app-nav-bar').css('display', 'block');
     $('.search-icon.button-collapse').css('visibility', 'visible');
   }

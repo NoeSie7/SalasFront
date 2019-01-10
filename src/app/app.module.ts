@@ -19,7 +19,6 @@ import { RouterModule } from '@angular/router';
 import { TimetableComponent } from './components/timetable/timetable.component';
 import { FullCalendarModule } from 'ng-fullcalendar';
 
-
 @NgModule({
   declarations: [
     AppComponent,

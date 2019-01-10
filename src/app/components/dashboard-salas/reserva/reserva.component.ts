@@ -59,15 +59,6 @@ export class ReservaComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.oficinaService.salasList = [
-    //       {
-    //         "idSala": 3,
-    //         "idOficina": 1,
-    //         "nombre": "Sala 3",
-    //         "plazas": "25",
-    //         "detalle": "Ourense - Sala 3",
-    //         "reservas":[]
-    //       }];
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
     this.sharedService.getCurrentOficina$()
       .subscribe(currentOficina => {
@@ -90,7 +81,7 @@ export class ReservaComponent implements OnInit {
         }
       });
     // builds form controls
-    this.buildForm();
+    //this.buildForm();
 
     if (this.valorSelect === undefined) {
       this.valorSelect = this.currentReserva.idSala;
@@ -109,8 +100,6 @@ export class ReservaComponent implements OnInit {
   }
 
   initControls() {
-    console.log('susolandia', this.currentReserva);
-
     const controls = {
       idReserva: [
         this.currentReserva.idReserva
@@ -160,17 +149,6 @@ export class ReservaComponent implements OnInit {
 
   loadForm(reserva: Reserva) {
     console.log('loadForm -> ', reserva);
-    // console.log('2 SAAAAAAAAAAAALAAAAAAAAAAAAAS:' + JSON.stringify(this.salas));
-    // this.loadSalas();
-    // let formatedDate = '';
-    // if (reserva.fecha != null) {
-    //   if (reserva.fecha.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    //     formatedDate = reserva.fecha;
-    //   } else {
-    //     formatedDate = reserva.fecha.split('-').reverse().join('-');
-    //     // reserva.fecha = formatedDate;
-    //   }
-    // }
 
     if (reserva.idReserva) {
       this.reservaForm.setValue({
@@ -181,8 +159,8 @@ export class ReservaComponent implements OnInit {
         email: reserva.usuario.email,
         extension: reserva.usuario.extension != null ? reserva.usuario.extension : '',
         fecha: reserva.fecha,
-        periodic: reserva.periodic,
-        periodicTime: reserva.periodicTime,
+        periodic: reserva.periodic || false,
+        periodicTime: reserva.periodicTime || '',
         horaDesde: reserva.horaDesde,
         horaHasta: reserva.horaHasta,
         asunto: reserva.asunto != null ? reserva.asunto : ''
@@ -211,18 +189,6 @@ export class ReservaComponent implements OnInit {
     retVal.asunto = this.reservaForm.get('asunto').value;
     return retVal;
   }
-
-  // getDateHtmlToRest(fecha) {
-  //   if (fecha.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-  //     return fecha.split('/').reverse().join('-');
-  //   }
-  //   if (fecha.match(/^\d{4}\/\d{2}\/\d{2}$/)) {
-  //     return fecha.split('/').reverse().join('-');
-  //   }
-  //   if (fecha.match(/^\d{4}-\d{2}-\d{2}$/)) {
-  //     return fecha.split('-').reverse().join('-');
-  //   }
-  // }
 
   loadUsuariosList() {
     this.selectUsuario(null);
@@ -253,12 +219,10 @@ export class ReservaComponent implements OnInit {
         email: selectedUsuario.email,
         extension: selectedUsuario.extension
       });
-      const lblEmail = document.getElementById('lblemail');
-      lblEmail.className += 'active';
-      const lblExtension = document.getElementById('lblextension');
-      lblExtension.className += 'active';
-      const lblEmpleado = document.getElementById('lblempleado');
-      lblEmpleado.className += ' active';
+      //Levantar los labels de los demas campos
+      document.querySelector('#lblemail').classList.add('active')
+      document.querySelector('#lblextension').classList.add('active')
+      document.querySelector('#lblempleado').classList.add('active')
     }
     this.usuariosList = new Array<Usuario>();
   }
@@ -344,13 +308,6 @@ export class ReservaComponent implements OnInit {
     this.sharedService.updateEndHour(this.currentHoraHasta);
   }
 
-  // loadSalas() {
-  //   this.oficinaService.getSalasByOficina(this.currentOficina.idOficina)
-  //     .subscribe(salas => {
-  //       this.sharedService.salasSelect = salas;
-  //     });
-  // }
-
   accept() {
     this.acceptEmiter.emit();
   }
@@ -392,10 +349,6 @@ export class ReservaComponent implements OnInit {
   }
 
   showIdSalaView() {
-  // if (this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0){
-  //   return true;
-  // } else
-  //     return false;
        return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
   }
 }

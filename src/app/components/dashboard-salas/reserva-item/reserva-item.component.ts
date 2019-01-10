@@ -42,31 +42,24 @@ export class ReservaItemComponent implements OnInit {
     // this.sharedService.isConsulting = false;
     // sets currentSala and currentReserva
     this.sharedService.updateCurrentSala(this.currentSala);
-    this.sharedService.updateCurrentReserva(this.currentReserva);
     // recollo o valor do id sala
     this.sharedService
-      .getCurrentSala$()
-      .map(sala => sala.idSala)
-      .subscribe(x => {
-        this.salaService.idSala = x;
-      }
-      ).unsubscribe();
+    .getCurrentSala$()
+    .map(sala => sala.idSala)
+    .subscribe(x => {
+      this.salaService.idSala = x;
+    }
+    ).unsubscribe();
+    this.sharedService.updateCurrentReserva(this.currentReserva);
   }
 
   getReservaWidth() {
-    // const num = 0.128205128205128205128205128205128205;
-    // const num = 0.12685;
     const num = 0.131;
-    // console.log("nuevo calculo 0.138 Duracion" ,this.currentReserva.duracion);
     return (this.currentReserva.duracion * num) + '%';
   }
 
   getReservaMargin() {
-    // const num = 0.128205128205128205128205128205128205;
-    // const num = 0.12685;
-    // const num = 0.138;
-    // console.log("nuevo calculo desde Back", this.currentReserva.minutoDesde);
-    return (this.currentReserva.minutoDesde); // * num);
+    return (this.currentReserva.minutoDesde);
   }
 
   getReservaColor() {
@@ -80,22 +73,27 @@ export class ReservaItemComponent implements OnInit {
     let color = '';
     // Si el indice que se pasa es > que el array de colores. Al indice le restamos,
     // la multiplicación del cociente de la división del indice entre el total de colores, por el total de colores
-    if (this.indice > colorsEven.length) {
-      const i = this.indice - ((this.indice / colorsEven.length) * colorsEven.length);
-      // si es par, es divisible por 2
-      if ((this.indiceSala % 2) === 0) {
-        color = colorsEven[i];
-      } else {
-        color = colorsOdd[i];
-      }
-    } else {
-      // Si no supera el total de colores, coprobamos si es par o impar.
-      if ((this.indiceSala % 2) === 0) {
-        color = colorsEven[this.indice];
-      } else {
-        color = colorsOdd[this.indice];
-      }
+    // if (this.indice > colorsEven.length) {
+    //   const i = this.indice - ((this.indice / colorsEven.length) * colorsEven.length);
+    //   // si es par, es divisible por 2
+    //   if ((this.indiceSala % 2) === 0) {
+    //     color = colorsEven[i];
+    //   } else {
+    //     color = colorsOdd[i];
+    //   }
+    // } else {
+    //   // Si no supera el total de colores, coprobamos si es par o impar.
+    //   if ((this.indiceSala % 2) === 0) {
+    //     color = colorsEven[this.indice];
+    //   } else {
+    //     color = colorsOdd[this.indice];
+    //   }
+    // }
+    let index = this.indice;
+    if(index > colorsEven.length){
+      index = this.indice - ((this.indice / colorsEven.length) * colorsEven.length);
     }
+    color = (this.indiceSala % 2) === 0 ? colorsEven[index]: colorsOdd[index];
     return color;
   }
 }

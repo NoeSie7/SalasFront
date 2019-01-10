@@ -121,7 +121,7 @@ export class SharedService {
     return this.salas$.asObservable();
   }
 
-  updateCurrentDate(date) {
+  updateCurrentDate(date :any = null) {
     if (!date) {
       date = new Date();
       date = date.toISOString().substr(0, 10);
@@ -130,17 +130,17 @@ export class SharedService {
     this.emitCurrentDate();
   }
 
-  updateStartHour(horaDesde) {
+  updateStartHour(horaDesde :any = null) {
     if (!horaDesde) {
-      horaDesde = new Date().toLocaleTimeString().substr(0, 5);
+      horaDesde = new Date().toLocaleTimeString().substr(0, 4);
     }
     this.currentHoraDesde = horaDesde;
     this.emitCurrentHoraDesde();
   }
 
-  updateEndHour(horaHasta) {
+  updateEndHour(horaHasta :any = null) {
     if (!horaHasta) {
-       horaHasta = new Date().toLocaleTimeString().substr(0, 5);
+       horaHasta = new Date().toLocaleTimeString().substr(0, 4);
     }
     this.currentHoraHasta = horaHasta;
     this.emitCurrentHoraHasta();
@@ -160,6 +160,8 @@ export class SharedService {
     if (reserva == null && this.currentSala != null) {
       reserva = new Reserva();
       reserva.idSala = idSala;
+      this.updateStartHour();
+      this.updateEndHour();
       reserva.fecha = this.getCurrentDate();
       reserva.horaDesde = this.getCurrentHoraDesde();
       reserva.horaHasta = this.getCurrentHoraHasta();
@@ -169,9 +171,6 @@ export class SharedService {
         this.setCurrentHoraHasta(reserva.horaHasta);
       }
     }
-    // reserva.fecha = this.getCurrentDateForHtml();
-    // reserva.horaDesde = this.getCurrentHoraDesde();
-    // reserva.horaHasta = this.getCurrentHoraHasta();
     this.currentReserva = reserva;
     this.emitCurrentReserva();
   }
@@ -188,15 +187,6 @@ export class SharedService {
   setCurrentDate(fecha) {
     this.currentDate = fecha;
   }
-
-  // getDateForHtml(date) {
-  //   return date.split('-').reverse().join('/');
-  // }
-
-  // getCurrentDateForHtml() {
-  //   return this.getCurrentDate().split('-').reverse().join('/');
-  // }
-
   getCurrentHoraDesde() {
     return this.currentHoraDesde;
   }
