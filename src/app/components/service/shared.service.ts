@@ -132,7 +132,7 @@ export class SharedService {
 
   updateStartHour(horaDesde :any = null) {
     if (!horaDesde) {
-      horaDesde = new Date().toLocaleTimeString().substr(0, 4);
+      horaDesde = new Date().toLocaleTimeString().substr(0, 5);
     }
     this.currentHoraDesde = horaDesde;
     this.emitCurrentHoraDesde();
@@ -140,7 +140,7 @@ export class SharedService {
 
   updateEndHour(horaHasta :any = null) {
     if (!horaHasta) {
-       horaHasta = new Date().toLocaleTimeString().substr(0, 4);
+       horaHasta = new Date().toLocaleTimeString().substr(0, 5);
     }
     this.currentHoraHasta = horaHasta;
     this.emitCurrentHoraHasta();
@@ -171,6 +171,11 @@ export class SharedService {
         this.setCurrentHoraHasta(reserva.horaHasta);
       }
     }
+    // reserva.fecha = this.getCurrentDateForHtml();
+    // reserva.horaDesde = this.getCurrentHoraDesde();
+    // reserva.horaHasta = this.getCurrentHoraHasta();
+
+    if(reserva.asunto == null || reserva.asunto == "") reserva.asunto = "Reserva de sala"
     this.currentReserva = reserva;
     this.emitCurrentReserva();
   }
@@ -212,4 +217,5 @@ export class SharedService {
 
     return `${dayString}/${monthString}/${year}`;
   }
+
 }

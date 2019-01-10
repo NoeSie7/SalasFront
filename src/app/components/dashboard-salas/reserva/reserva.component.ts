@@ -1,19 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { ValidatorsService } from '../../../core/shared/forms/validators.service';
-import { FormsToolsService } from '../../../core/shared/forms/forms-tools.service';
-import { Observable } from 'rxjs/Observable';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { toast } from "angular2-materialize";
 import { Subscription } from 'rxjs';
-
-import { Oficina } from '../../_data/oficina.model';
-import { Sala } from '../../_data/sala.model';
-import { Reserva } from '../../_data/reserva.model';
-import { Usuario } from '../../_data/usuario.model';
-import { SharedService } from '../../service/shared.service';
-import { ReservaService } from '../../service/reserva.service';
-import { UsuarioService } from '../../service/usuario.service';
-import { OficinaService } from '../../service/oficina.service';
+import { Observable } from 'rxjs/Observable';
+import { FormsToolsService } from '../../../core/shared/forms/forms-tools.service';
+import { ValidatorsService } from '../../../core/shared/forms/validators.service';
 import { ConfirmationPopup } from '../../confirmation-popup/confirmation-popup.model';
+import { OficinaService } from '../../service/oficina.service';
+import { ReservaService } from '../../service/reserva.service';
+import { SharedService } from '../../service/shared.service';
+import { UsuarioService } from '../../service/usuario.service';
+import { Oficina } from '../../_data/oficina.model';
+import { Reserva } from '../../_data/reserva.model';
+import { Sala } from '../../_data/sala.model';
+import { Usuario } from '../../_data/usuario.model';
+
 
 @Component({
   selector: 'app-reserva',
@@ -37,10 +38,17 @@ export class ReservaComponent implements OnInit {
   public reservaForm: FormGroup;
   public usuariosList: Usuario[];
 
+  private aux = {
+    horaDesde:null,
+    horaHasta:null
+  }
+
   @Input() searchDateReservaInput = '';
   @Input() currentHoraDesde = '';
   public currentHoraDesde$: Observable<string>;
   @Input() currentHoraHasta = '';
+
+  public flag = true;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -87,6 +95,7 @@ export class ReservaComponent implements OnInit {
       this.valorSelect = this.currentReserva.idSala;
     }
   }
+
   valorSelected(valor: number) {
     this.valorSelect = valor;
     this.reservaForm.get('idSala').setValue(valor);
@@ -160,10 +169,10 @@ export class ReservaComponent implements OnInit {
         extension: reserva.usuario.extension != null ? reserva.usuario.extension : '',
         fecha: reserva.fecha,
         periodic: reserva.periodic || false,
-        periodicTime: reserva.periodicTime || '',
+        periodicTime: reserva.periodicTime || 0,
         horaDesde: reserva.horaDesde,
         horaHasta: reserva.horaHasta,
-        asunto: reserva.asunto != null ? reserva.asunto : ''
+        asunto: reserva.asunto != null ? reserva.asunto : 'Reserva de sala'
       });
     }
   }
@@ -295,17 +304,70 @@ export class ReservaComponent implements OnInit {
     this.sharedService.updateStartHour(this.searchDateReservaInput);
 
   }
+  getToast(info, mensaje, action) {
+    const message = `${info} ${mensaje}`;
+    const toastStr = `<span>${message}</span>`;
+    toast(toastStr, 3000, action);
+  }
+
+  ckeckReservaDesdeHasta() {
+    return  (this.currentHoraDesde != "") && (this.currentHoraHasta != "");
+    //if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+    //  return true;
+    //}
+    //return false;
+  }
+
+  currentReservationData() {
+    this.currentReserva.idSala = this.reservaForm.get('idSala').value;
+
+    if(this.currentReserva.idSala == 0) {
+      this.getToast('','Debe elegir una sala para comprobar disponibilidad',null);
+    }
+
+    this.currentReserva.fecha = this.reservaForm.get('fecha').value;
+
+    this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva).subscribe(e => {
+      console.warn(e);
+      if(!e && this.flag){
+        this.flag = false;
+        this.currentReserva.horaDesde = this.aux.horaDesde;
+        this.currentReserva.horaHasta = this.aux.horaHasta;
+        this.currentReserva.fecha = this.reservaForm.get('fecha').value;
+        this.buildForm();
+        this.getToast('Error en la reserva','La sala no esta disponible para esas horas',null);
+      }
+    },
+    error => {
+      console.error(`error al encontrar peticion ${error}`);
+    });
+  }
 
   searchDateReservaDesdeChange() {
     this.currentHoraDesde = document.getElementById('search-date-desde-input').getAttribute('value');
     this.sharedService.updateStartHour(this.currentHoraDesde);
 
     this.onClickHoraHastaAttachObserbableToAdd30();
+
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+
+      this.currentReservationData();
+      this.flag = true;
+
+    }
+
   }
 
   searchDateReservaHastaChange() {
     this.currentHoraHasta = document.getElementById('search-date-hasta-input').getAttribute('value');
     this.sharedService.updateEndHour(this.currentHoraHasta);
+
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+
+      this.currentReservationData();
+      this.flag = true;
+    }
+
   }
 
   accept() {
@@ -350,5 +412,18 @@ export class ReservaComponent implements OnInit {
 
   showIdSalaView() {
        return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
+  }
+
+  getOriginalHourValue(key,$event){
+    //if($event.srcElement.getAttribute('formcontrolname') === 'horaDesde'){
+    //  this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
+    //  this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
+    //}else{
+    //}
+    this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
+    this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
+ //   this.aux[key] = this.reservaForm.get(key).value;
+   // console.log($event);
+
   }
 }
