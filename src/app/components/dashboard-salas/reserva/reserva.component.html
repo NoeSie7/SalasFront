@@ -42,9 +42,9 @@
           <div class="input-field col s4">
             <i class="material-icons prefix">access_time</i>
             <input *ngIf="sharedService.isConsulting" disabled id="search-date-desde-input" type="text" class="validate timepicker" formControlName="horaDesde"
-              required [(ngModel)]="currentHoraDesde">
+              required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue('horaDesde',$event)">
             <input *ngIf="!sharedService.isConsulting" id="search-date-desde-input" type="text" class="validate timepicker" formControlName="horaDesde"
-              required [(ngModel)]="currentHoraDesde">
+              required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue('horaDesde',$event)">
             <label for="search-date-desde-input" class="active">Hora desde</label>
             <input type="button" id="search-date-desde-button" class="hidden-button" (click)="searchDateReservaDesdeChange()">
             <small *ngIf="reservaForm.get('horaDesde').invalid">La hora de inicio es obligatoria.</small>
@@ -53,9 +53,9 @@
           <div class="input-field col s4">
             <i class="material-icons prefix">access_time</i>
             <input *ngIf="sharedService.isConsulting" disabled id="search-date-hasta-input" type="text" class="validate timepicker" formControlName="horaHasta"
-              required [(ngModel)]="currentHoraHasta">
+              required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue('horaHasta',$event)">
             <input *ngIf="!sharedService.isConsulting" id="search-date-hasta-input" type="text" class="validate timepicker" formControlName="horaHasta"
-              required [(ngModel)]="currentHoraHasta">
+              required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue('horaHasta',$event)">
             <label for="search-date-hasta-input" class="active">Hora hasta</label>
             <input type="button" id="search-date-hasta-button" class="hidden-button" (click)="searchDateReservaHastaChange()">
             <small *ngIf="reservaForm.get('horaHasta').invalid">La hora de fin es obligatoria.</small>

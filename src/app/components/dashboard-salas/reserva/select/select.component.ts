@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { OficinaService } from '../../../service/oficina.service';
 import { SalaService } from '../../../service/sala.service';
+import {ReservaComponent} from '../../reserva/reserva.component';
 
 @Component({
   selector: 'app-select',
@@ -17,7 +18,7 @@ export class SelectComponent {
   private nombreSelect: String = 'Selecciona una sala';
   @Output() valorSelect = new EventEmitter<number>();
 
-  constructor(private oficinaService: OficinaService, private salaService: SalaService) {
+  constructor(private oficinaService: OficinaService, private salaService: SalaService, private reservaComponent: ReservaComponent) {
     this.salaService.idSala$.subscribe(id => {
       const idSalaChange = id;
       if (idSalaChange !== 0) {
@@ -41,6 +42,11 @@ export class SelectComponent {
     console.log(`Click Select ${result.idSala}`);
     this.nombreSelect = result.nombre;
     this.valorSelect.emit(result.idSala);
+
+    if(this.reservaComponent.ckeckReservaDesdeHasta()) {
+      this.reservaComponent.currentReservationData();
+      this.reservaComponent.flag = true;
+    }
 
   }
   private cambiarFlag() {

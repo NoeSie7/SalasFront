@@ -38,6 +38,11 @@ export class ReservaComponent implements OnInit {
   public reservaForm: FormGroup;
   public usuariosList: Usuario[];
 
+  private aux = {
+    horaDesde:null,
+    horaHasta:null
+  }
+
   @Input() searchDateReservaInput = '';
   @Input() currentHoraDesde = '';
   public currentHoraDesde$: Observable<string>;
@@ -100,21 +105,9 @@ export class ReservaComponent implements OnInit {
     }
   }
 
-  ngDoCheck() {
-    /*if((this.currentHoraDesde!="") && (this.currentHoraHasta!="")) {
-      this.currentReserva.idSala = 3;
-      this.sharedService.checkAvailability(this.currentReserva);
-    }*/
-  }
-
   valorSelected(valor: number) {
     this.valorSelect = valor;
     this.reservaForm.get('idSala').setValue(valor);
-    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
-
-      this.currentReservationData();
-    }
-    this.flag = true;
   }
   buildForm() {
     // initialize form controls
@@ -125,7 +118,6 @@ export class ReservaComponent implements OnInit {
   }
 
   initControls() {
-    console.log('susolandia', this.currentReserva);
 
     const controls = {
       idReserva: [
@@ -197,8 +189,8 @@ export class ReservaComponent implements OnInit {
         email: reserva.usuario.email,
         extension: reserva.usuario.extension != null ? reserva.usuario.extension : '',
         fecha: reserva.fecha,
-        periodic: reserva.periodic,
-        periodicTime: reserva.periodicTime,
+        periodic: reserva.periodic || false,
+        periodicTime: reserva.periodicTime || 0,
         horaDesde: reserva.horaDesde,
         horaHasta: reserva.horaHasta,
         asunto: reserva.asunto != null ? reserva.asunto : 'Reserva de sala'
@@ -353,6 +345,13 @@ export class ReservaComponent implements OnInit {
     toast(toastStr, 3000, action); 
   }
 
+  ckeckReservaDesdeHasta() {
+    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+      return true;
+    }
+    return false;
+  }
+
   currentReservationData() {
     this.currentReserva.idSala = this.reservaForm.get('idSala').value;
 
@@ -367,6 +366,10 @@ export class ReservaComponent implements OnInit {
       if((!e) && (this.flag)){
         this.flag = false;
         this.getToast('','La sala no esta disponible para esas horas',null);
+        this.currentReserva.horaDesde = this.aux.horaDesde;
+        this.currentReserva.horaHasta = this.aux.horaHasta;
+        this.currentReserva.fecha = this.reservaForm.get('fecha').value;
+        this.buildForm();
       }
     },
     error => {
@@ -448,10 +451,19 @@ export class ReservaComponent implements OnInit {
   }
 
   showIdSalaView() {
-  // if (this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0){
-  //   return true;
-  // } else
-  //     return false;
        return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
+  }
+
+  getOriginalHourValue(key,$event){
+    //if($event.srcElement.getAttribute('formcontrolname') === 'horaDesde'){
+    //  this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
+    //  this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
+    //}else{
+    //}
+    this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
+    this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
+ //   this.aux[key] = this.reservaForm.get(key).value;
+   // console.log($event);
+    
   }
 }

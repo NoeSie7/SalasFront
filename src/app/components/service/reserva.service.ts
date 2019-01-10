@@ -151,11 +151,11 @@ export class ReservaService {
     }
   }
 
-  checkAvailability(h1, h2, reserva): Observable<any> {
+  checkAvailability(horaDesde, horaHasta, reserva): Observable<any> {
     console.log("llamar servicio comprobar disponibilidad");
     
-    reserva.horaDesde = h1;
-    reserva.horaHasta = h2;
+    reserva.horaDesde = horaDesde;
+    reserva.horaHasta = horaHasta;
 
 
     console.log(reserva.idSala);
