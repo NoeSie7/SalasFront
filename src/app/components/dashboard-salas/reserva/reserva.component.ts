@@ -342,14 +342,15 @@ export class ReservaComponent implements OnInit {
   getToast(info, mensaje, action) {
     const message = `${info} ${mensaje}`;
     const toastStr = `<span>${message}</span>`;
-    toast(toastStr, 3000, action); 
+    toast(toastStr, 3000, action);
   }
 
   ckeckReservaDesdeHasta() {
-    if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
-      return true;
-    }
-    return false;
+    return  (this.currentHoraDesde != "") && (this.currentHoraHasta != "");
+    //if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
+    //  return true;
+    //}
+    //return false;
   }
 
   currentReservationData() {
@@ -363,13 +364,13 @@ export class ReservaComponent implements OnInit {
 
     this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva).subscribe(e => {
       console.warn(e);
-      if((!e) && (this.flag)){
+      if(!e){
         this.flag = false;
-        this.getToast('','La sala no esta disponible para esas horas',null);
         this.currentReserva.horaDesde = this.aux.horaDesde;
         this.currentReserva.horaHasta = this.aux.horaHasta;
         this.currentReserva.fecha = this.reservaForm.get('fecha').value;
         this.buildForm();
+        this.getToast('Error en la reserva','La sala no esta disponible para esas horas',null);
       }
     },
     error => {
@@ -386,7 +387,7 @@ export class ReservaComponent implements OnInit {
     if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
 
       this.currentReservationData();
-      
+
     }
 
   }
@@ -464,6 +465,6 @@ export class ReservaComponent implements OnInit {
     this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
  //   this.aux[key] = this.reservaForm.get(key).value;
    // console.log($event);
-    
+
   }
 }
