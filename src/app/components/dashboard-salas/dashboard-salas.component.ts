@@ -137,7 +137,7 @@ export class DashboardSalasComponent implements OnInit {
           } else {
             console.log('No ha habido coincidencias');
             this.salas = [];
-            this.getToast('ADVERTENCIA:', 'Aun NO hay reservas para esta Sala...', null);
+            this.getToast('ADVERTENCIA:', 'Aun NO hay reservas para esta Sala...', 'yellow');
           }
         });
 

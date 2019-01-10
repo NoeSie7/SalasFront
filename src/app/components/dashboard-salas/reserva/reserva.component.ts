@@ -322,7 +322,7 @@ export class ReservaComponent implements OnInit {
     this.currentReserva.idSala = this.reservaForm.get('idSala').value;
 
     if(this.currentReserva.idSala == 0) {
-      this.getToast('','Debe elegir una sala para comprobar disponibilidad',null);
+      this.getToast('','Debe elegir una sala para comprobar disponibilidad','red');
     }
 
     this.currentReserva.fecha = this.reservaForm.get('fecha').value;
@@ -335,7 +335,7 @@ export class ReservaComponent implements OnInit {
         this.currentReserva.horaHasta = this.aux.horaHasta;
         this.currentReserva.fecha = this.reservaForm.get('fecha').value;
         this.buildForm();
-        this.getToast('Error en la reserva','La sala no esta disponible para esas horas',null);
+        this.getToast('Error en la reserva','La sala no esta disponible para esas horas','red');
       }
     },
     error => {
