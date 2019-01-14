@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { toast } from "angular2-materialize";
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
@@ -37,6 +37,7 @@ export class ReservaComponent implements OnInit {
 
   public reservaForm: FormGroup;
   public usuariosList: Usuario[];
+  public weekDays: any[];
 
   private aux = {
     horaDesde:null,
@@ -64,6 +65,28 @@ export class ReservaComponent implements OnInit {
     this.searchDateReservaInput = this.getDateForHtml();
     this.currentHoraDesde = this.getHoraDesde();
     this.currentHoraHasta = this.getHoraHasta();
+    this.weekDays = [
+      {
+        name:'lunes',
+        value: 2
+      },
+      {
+        name:'martes',
+        value: 3
+      },
+      {
+        name:'miercoles',
+        value: 4
+      },
+      {
+        name:'jueves',
+        value: 5
+      },
+      {
+        name:'viernes',
+        value: 6
+      },
+    ];
   }
 
   ngOnInit() {
@@ -89,7 +112,6 @@ export class ReservaComponent implements OnInit {
         }
       });
     // builds form controls
-    //this.buildForm();
 
     if (this.valorSelect === undefined) {
       this.valorSelect = this.currentReserva.idSala;
@@ -106,6 +128,10 @@ export class ReservaComponent implements OnInit {
     this.reservaForm = this.formBuilder.group(controls);
     // loads form values
     this.loadForm(this.currentReserva);
+  }
+
+  addDaysControls(){
+    return this.formBuilder.array(this.weekDays.map(e => this.formBuilder.control(false)));
   }
 
   initControls() {
@@ -133,6 +159,7 @@ export class ReservaComponent implements OnInit {
       periodicTime: [
         this.currentReserva.periodicTime
       ],
+      weekDays:this.addDaysControls(),
       extension: [
         this.currentReserva.usuario.extension
       ],
@@ -187,8 +214,15 @@ export class ReservaComponent implements OnInit {
     retVal.usuario.extension = this.reservaForm.get('extension').value;
     retVal.fecha = this.reservaForm.get('fecha').value;
     if (this.reservaForm.get('periodic').value) {
-    retVal.periodic = true;
-    retVal.periodicTime = this.reservaForm.get('periodicTime').value;
+      retVal.periodic = true;
+      retVal.periodicTime = this.reservaForm.get('periodicTime').value;
+      let days = [];
+      this.daysArray.controls.forEach((control,i) =>{
+        if(control.value){
+          days.push(this.weekDays[i].value);
+        }
+      });
+      retVal.weekDays = days.length > 0 ? days : null;
     }else {
       retVal.periodic = false;
       retVal.periodicTime = 0;
@@ -270,7 +304,6 @@ export class ReservaComponent implements OnInit {
   }
 
     delete() {
-      // this.sharedService.isConsulting = false;
       // updates reserva object with selected
       this.sharedService.updateCurrentReserva(this.currentReserva);
       // opens confirmation dialog
@@ -312,10 +345,6 @@ export class ReservaComponent implements OnInit {
 
   ckeckReservaDesdeHasta() {
     return  (this.currentHoraDesde != "") && (this.currentHoraHasta != "");
-    //if((this.currentHoraDesde != "") && (this.currentHoraHasta != "")) {
-    //  return true;
-    //}
-    //return false;
   }
 
   currentReservationData() {
@@ -397,9 +426,7 @@ export class ReservaComponent implements OnInit {
   }
 
   private isPresentNodeDomNew(): boolean {
-    const elementNew = document.getElementsByClassName('new')[0];
-
-    return elementNew == null ? true : false;
+    return document.getElementsByClassName('new')[0] == null;
   }
 
   private onClickHoraHastaAttachObserbableToAdd30() {
@@ -414,16 +441,21 @@ export class ReservaComponent implements OnInit {
        return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
   }
 
-  getOriginalHourValue(key,$event){
-    //if($event.srcElement.getAttribute('formcontrolname') === 'horaDesde'){
-    //  this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
-    //  this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
-    //}else{
-    //}
+  getOriginalHourValue(){
     this.aux.horaDesde = this.reservaForm.get('horaDesde').value;
     this.aux.horaHasta = this.reservaForm.get('horaHasta').value;
- //   this.aux[key] = this.reservaForm.get(key).value;
-   // console.log($event);
+  }
 
+  checkAllDays($event){
+    console.log(this.reservaForm.get('weekDays').value);
+    if($event.target.checked){
+      this.daysArray.controls.forEach((e,i) => e.setValue(this.weekDays[i].value))
+    }else{
+      this.daysArray.controls.forEach(e => e.setValue(null))
+    }
+  }
+
+  get daysArray(){
+    return <FormArray>this.reservaForm.get('weekDays');
   }
 }

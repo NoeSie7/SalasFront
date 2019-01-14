@@ -229,7 +229,7 @@ export class DashboardSalasComponent implements OnInit {
       this.confirmationPopup.action === 'save' &&
       this.currentReserva.periodic
     ) {
-      this.getToast('', 'Insertando reservas...', null);
+      this.getToast('', 'Insertando reservas...', 'blue');
       this.reservaService
         .insertOrUpdateReservas(this.currentReserva)
         .subscribe(response => {

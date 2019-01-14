@@ -25,12 +25,12 @@ var initTimelineItemTooltips = function () {
 };
 
 $(document).ready(function () {
-  // Loading 
+  // Loading
   setTimeout(function () {
     $('#preloader').fadeOut('slow');
   }, 1000);
   // END Loading
-  //  Desplegable de búsqueda lateral 
+  //  Desplegable de búsqueda lateral
   $('.button-collapse').sideNav({
     menuWidth: 700,
     edge: 'right',
@@ -43,7 +43,7 @@ $(document).ready(function () {
       $('.search-icon').removeClass('arrow');
     },
   });
-  // END Desplegable de búsqueda lateral 
+  // END Desplegable de búsqueda lateral
 
   $('#search-date-input').pickadate({
     selectMonths: true, // Creates a dropdown to control month
@@ -121,7 +121,7 @@ $(document).ready(function () {
           onSet: function (e) {
             var selectedValue = $('#search-date-reserva-input').val();
             $('#search-date-reserva-input').attr('value', selectedValue);
-            $('#search-date-reserva-input').removeClass('invalid');            
+            $('#search-date-reserva-input').removeClass('invalid');
             if (e.select) {
               $('#search-date-reserva-button').click();
             }
@@ -173,7 +173,7 @@ $(document).ready(function () {
     $('#modalCrear').modal('open');
     $('#selector').material_select();
   });
-  
+
   $("body").on("click", "#cerrarReserva, .discard", function (e) {
     $('#modalCrear').modal('close');
     let tupled = mappedAndTupledElements()
@@ -183,7 +183,7 @@ $(document).ready(function () {
   $("body").on("click",".picker__holder", function () {
     $('#search-date-reserva-input').removeClass('invalid');
   })
-  
+
   $("body").on("input","#empleado",function (){
     let isEmptyinputExtension = $('#extension').text() == '';
     $(".toChangeClassOnJqOnDeleteUserInput").map(function (index,domElem){ return isEmptyinputExtension ? domElem.classList.remove("active") : domElem;});

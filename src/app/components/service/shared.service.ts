@@ -132,7 +132,7 @@ export class SharedService {
 
   updateStartHour(horaDesde :any = null) {
     if (!horaDesde) {
-      horaDesde = new Date().toLocaleTimeString().substr(0, 5);
+      horaDesde = new Date().toTimeString().substr(0, 5);
     }
     this.currentHoraDesde = horaDesde;
     this.emitCurrentHoraDesde();
@@ -140,7 +140,7 @@ export class SharedService {
 
   updateEndHour(horaHasta :any = null) {
     if (!horaHasta) {
-       horaHasta = new Date().toLocaleTimeString().substr(0, 5);
+       horaHasta = new Date().toTimeString().substr(0, 5);
     }
     this.currentHoraHasta = horaHasta;
     this.emitCurrentHoraHasta();

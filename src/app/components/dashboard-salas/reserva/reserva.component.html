@@ -24,7 +24,8 @@
         <!-- select room -->
         <div class="row input-file select-room">
           <div class="col s4">
-            <input type="text" id="idSala" readonly="true" hidden formControlName="idSala" value="{{valorSelect}}" [ngModel]="valorSelect">
+            <input type="text" id="idSala" readonly="true" hidden formControlName="idSala" value="{{valorSelect}}"
+              [ngModel]="valorSelect">
             <app-select (valorSelect)="valorSelected($event)"></app-select>
             <small *ngIf="showIdSalaView()" class="validarSala">Seleccionar una sala es obligatorio.</small>
           </div>
@@ -33,7 +34,8 @@
         <div class="row">
           <div class="input-field col s4">
             <i class="material-icons prefix">today</i>
-            <input id="search-date-reserva-input" type="text" class="validate datepicker" formControlName="fecha" required [(ngModel)]="searchDateReservaInput">
+            <input id="search-date-reserva-input" type="text" class="validate datepicker" formControlName="fecha"
+              required [(ngModel)]="searchDateReservaInput">
             <label for="search-date-reserva-input" class="active">Fecha</label>
             <input type="button" id="search-date-reserva-button" class="hidden-button" (click)="searchDateChange()">
             <small *ngIf="reservaForm.get('fecha').invalid">La fecha es obligatoria.</small>
@@ -41,10 +43,10 @@
           <!-- Hour -->
           <div class="input-field col s4">
             <i class="material-icons prefix">access_time</i>
-            <input *ngIf="sharedService.isConsulting" disabled id="search-date-desde-input" type="text" class="validate timepicker" formControlName="horaDesde"
-              required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue('horaDesde',$event)">
-            <input *ngIf="!sharedService.isConsulting" id="search-date-desde-input" type="text" class="validate timepicker" formControlName="horaDesde"
-              required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue('horaDesde',$event)">
+            <input *ngIf="sharedService.isConsulting" disabled id="search-date-desde-input" type="text" class="validate timepicker"
+              formControlName="horaDesde" required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue()">
+            <input *ngIf="!sharedService.isConsulting" id="search-date-desde-input" type="text" class="validate timepicker"
+              formControlName="horaDesde" required [(ngModel)]="currentHoraDesde" (focus)="getOriginalHourValue()">
             <label for="search-date-desde-input" class="active">Hora desde</label>
             <input type="button" id="search-date-desde-button" class="hidden-button" (click)="searchDateReservaDesdeChange()">
             <small *ngIf="reservaForm.get('horaDesde').invalid">La hora de inicio es obligatoria.</small>
@@ -52,10 +54,10 @@
 
           <div class="input-field col s4">
             <i class="material-icons prefix">access_time</i>
-            <input *ngIf="sharedService.isConsulting" disabled id="search-date-hasta-input" type="text" class="validate timepicker" formControlName="horaHasta"
-              required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue('horaHasta',$event)">
-            <input *ngIf="!sharedService.isConsulting" id="search-date-hasta-input" type="text" class="validate timepicker" formControlName="horaHasta"
-              required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue('horaHasta',$event)">
+            <input *ngIf="sharedService.isConsulting" disabled id="search-date-hasta-input" type="text" class="validate timepicker"
+              formControlName="horaHasta" required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue()">
+            <input *ngIf="!sharedService.isConsulting" id="search-date-hasta-input" type="text" class="validate timepicker"
+              formControlName="horaHasta" required [(ngModel)]="currentHoraHasta" (focus)="getOriginalHourValue()">
             <label for="search-date-hasta-input" class="active">Hora hasta</label>
             <input type="button" id="search-date-hasta-button" class="hidden-button" (click)="searchDateReservaHastaChange()">
             <small *ngIf="reservaForm.get('horaHasta').invalid">La hora de fin es obligatoria.</small>
@@ -66,10 +68,10 @@
           <!-- staff -->
           <div class="input-field col s4">
             <i class="material-icons prefix">person</i>
-            <input *ngIf="sharedService.isConsulting" disabled id="empleado" type="text" class="validate" formControlName="nombreUsuario"
-              autocomplete="off" (keyup)="loadUsuariosList()" required>
-            <input *ngIf="!sharedService.isConsulting" id="empleado" type="text" class="validate" formControlName="nombreUsuario" (keyup)="loadUsuariosList()"
-              autocomplete="off" required>
+            <input *ngIf="sharedService.isConsulting" disabled id="empleado" type="text" class="validate"
+              formControlName="nombreUsuario" autocomplete="off" (keyup)="loadUsuariosList()" required>
+            <input *ngIf="!sharedService.isConsulting" id="empleado" type="text" class="validate" formControlName="nombreUsuario"
+              (keyup)="loadUsuariosList()" autocomplete="off" required>
 
             <label id="lblempleado" class="toChangeClassOnJqOnCloseSave" for="empleado" [ngClass]="{'active':  currentReserva.usuario.nombre?.length > 0}">Empleado</label>
             <!-- collection -->
@@ -81,51 +83,66 @@
           <!-- Mail -->
           <div class="input-field col s4">
             <i class="material-icons prefix">mail_outline</i>
-            <input *ngIf="!sharedService.isConsulting" id="email" type="text" class="validate" formControlName="email" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-            <label id="lblemail" class="activeLabel toChangeClassOnJqOnDeleteUserInput toChangeClassOnJqOnCloseSave" for="email" [ngClass]="{'active': currentReserva.usuario.email?.length > 0}">Email</label>
+            <input *ngIf="!sharedService.isConsulting" id="email" type="text" class="validate" formControlName="email"
+              required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+            <label id="lblemail" class="activeLabel toChangeClassOnJqOnDeleteUserInput toChangeClassOnJqOnCloseSave"
+              for="email" [ngClass]="{'active': currentReserva.usuario.email?.length > 0}">Email</label>
             <small *ngIf="reservaForm.get('email').invalid">El email es obligatorio.</small>
           </div>
 
           <!-- extension -->
           <div class="input-field col s4">
             <i class="material-icons prefix">local_phone</i>
-            <input id="extension" type="text" class="validate" formControlName="extension" required pattern="[0-9]*" maxlength="9">
-            <label id="lblextension" class="toChangeClassOnJqOnDeleteUserInput toChangeClassOnJqOnCloseSave" for="extension" [ngClass]="{'active': currentReserva.usuario.extension?.length > 0 }">Extension</label>
+            <input id="extension" type="text" class="validate" formControlName="extension" required pattern="[0-9]*"
+              maxlength="9">
+            <label id="lblextension" class="toChangeClassOnJqOnDeleteUserInput toChangeClassOnJqOnCloseSave" for="extension"
+              [ngClass]="{'active': currentReserva.usuario.extension?.length > 0 }">Extension</label>
             <small *ngIf="reservaForm.get('extension').invalid">La extension es obligatoria.</small>
           </div>
 
         </div>
         <div class="row">
           <!-- subject -->
-          <div class="input-field col s6">
+          <div class="input-field col s4">
             <i class="material-icons prefix">subject</i>
-            <textarea *ngIf="!sharedService.isConsulting" id="asunto" type="text" class="materialize-textarea" maxlength="250" formControlName="asunto"></textarea>
+            <textarea *ngIf="!sharedService.isConsulting" id="asunto" type="text" class="materialize-textarea"
+              maxlength="250" formControlName="asunto"></textarea>
             <label [ngClass]="{'active': currentReserva.asunto?.length > 0 }" for="asunto">Asunto</label>
           </div>
 
           <div class="switch col s2">
-              <label>
-                <i class="material-icons">alarm_off</i>
-                <input type="checkbox" id="periodic" formControlName="periodic" [ngClass]="{'active': currentReserva.periodic?.length > 0 }">
-                <span class="lever"></span>
-                <i class="material-icons">alarm_on</i>
-                Reserva Periodica
-              </label>
+            <label>
+              <p>Reserva Periodica</p>
+              <i class="material-icons">alarm_off</i>
+              <input type="checkbox" id="periodic" formControlName="periodic" [ngClass]="{'active': currentReserva.periodic?.length > 0 }">
+              <span class="lever"></span>
+              <i class="material-icons">alarm_on</i>
+            </label>
 
           </div>
-            <!-- Periodic time -->
-          <div *ngIf="reservaForm.get('periodic').value" class="input-field col s4">
-              <i class="material-icons prefix">repeat</i>
-              <input id="periodicTime" type="text" class="validate"  formControlName="periodicTime" pattern="[0-9]*" min="1" max="10" maxlength="2">
-              <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime" >Tiempo de la repeticion en dias</label>
-
-            </div>
-            <div class="col s12" *ngIf="!sharedService.isConsulting">
-              <button id="button-action-save" type="submit" (click)="save()" value="Guardar" [disabled]="!reservaForm.valid" data-target="modalConfirmation"
-                       class="btn modal-trigger waves-effect waves-light">Guardar</button>
-              <button *ngIf="this.isPresentNodeDomNew()" id="button-action-delete" (click)="delete()" value="Eliminar" data-target="modalConfirmation"
-                      class="btn modal-trigger waves-effect waves-light">Eliminar</button>
-            </div>
+          <!-- Periodic time -->
+            <div *ngIf="reservaForm.get('periodic').value" class="col s6">
+              <section class="input-field">
+                  <i class="material-icons prefix">repeat</i>
+                  <input id="periodicTime" type="text" class="validate" formControlName="periodicTime" pattern="[0-9]*" min="1"
+                    max="10" maxlength="2">
+                  <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime">Tiempo
+                    de la repeticion en dias</label>
+              </section>
+              <section class="week">
+                <p><input type="checkbox" id="all" (change)="checkAllDays($event)"/><label for="all">Todos</label></p>
+                <p *ngFor="let control of daysArray.controls; let i = index">
+                  <input type="checkbox" [formControl]="control" id="day{{i}}"/>
+                  <label for="day{{i}}">{{weekDays[i].name}}</label>
+                </p>
+            </section>
+          </div>
+          <div class="col s12" *ngIf="!sharedService.isConsulting">
+            <button id="button-action-save" type="submit" (click)="save()" value="Guardar" [disabled]="!reservaForm.valid"
+              data-target="modalConfirmation" class="btn modal-trigger waves-effect waves-light">Guardar</button>
+            <button *ngIf="this.isPresentNodeDomNew()" id="button-action-delete" (click)="delete()" value="Eliminar"
+              data-target="modalConfirmation" class="btn modal-trigger waves-effect waves-light">Eliminar</button>
+          </div>
         </div>
 
       </div>

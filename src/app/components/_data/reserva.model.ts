@@ -1,5 +1,4 @@
 import { Usuario } from './usuario.model';
-
 export class Reserva {
 
     public idReserva: number;
@@ -13,6 +12,7 @@ export class Reserva {
     public duracion: number;
     public minutoDesde: number;
     public asunto: string;
+    public weekDays: number[];
 
     constructor() {
         this.usuario = new Usuario();
