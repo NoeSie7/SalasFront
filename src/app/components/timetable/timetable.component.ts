@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toast } from 'angular2-materialize';
 import { OptionsInput } from 'fullcalendar';
+import * as $ from "jquery";
 // import moment = require('moment');
 import * as moment from 'moment';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Observable } from 'rxjs';
 import { OficinaService } from '../service/oficina.service';
 import { ReservaService } from '../service/reserva.service';
-import { SharedService } from '../service/shared.service';
 import { Sala } from '../_data/sala.model';
 
 @Component({
@@ -20,7 +20,7 @@ export class TimetableComponent implements OnInit {
 
   private calendarOptions: OptionsInput;
   private date: Date;
-  private events = [];
+  public events = [];
 
   private seconds = 30;
 
@@ -30,9 +30,10 @@ export class TimetableComponent implements OnInit {
 
   public salas = new Array<Sala>();
   public salas$: Observable<Sala[]>;
-  public loading: boolean = true;
   public numberroom: Number;
 
+
+  private calendario: HTMLElement;
 
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
@@ -41,8 +42,7 @@ export class TimetableComponent implements OnInit {
     private oficinaService: OficinaService) { }
 
   ngOnInit() {
-    this.loadEvents()
-
+    //this.calendario = $('ng-fullcalendar');
     this.calendarOptions = {
       height: 'auto',
       titleFormat: 'DD/MM/YYYY',
@@ -70,7 +70,10 @@ export class TimetableComponent implements OnInit {
       minTime: moment.duration('07:00:00'), // Duracion generica del calendario
       maxTime: moment.duration('20:00:00'),
     };
-
+    setTimeout(() => {
+      this.loadEvents()
+    }, 100);
+    setInterval(() => this.loadEvents(), this.seconds * 1000)
 
   }
 
@@ -79,49 +82,32 @@ export class TimetableComponent implements OnInit {
   }
 
   loadEvents() {
-    this.loading = true;
     this.clearEvents();
     this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe(res => {
-      console.log('RES', res);
       this.salas = res;
 
     });
     this.numberroom = this.route.snapshot.params.room;
 
     if (this.route.snapshot.params.room !== undefined) {
-
-      this.reservaService
-        .getReservasBySala(this.route.snapshot.params.room)
-        .subscribe(responseAux => {
-          console.log('RESPONSEAUX', responseAux);
-          this.currentSala.reservas = responseAux;
-          this.currentSala.reservas.forEach(e => {
-            const dateinicio = new Date(this.convertHoras(e.fecha)
-              + ' ' + e.horaDesde);
-            const datefin = new Date(this.convertHoras(e.fecha)
-              + ' ' + e.horaHasta);
-            console.log('parseo', dateinicio);
-            const el = {
-              start: dateinicio,
-              title: e.asunto,
-              end: datefin,
-            };
-            console.log('ELEMENTO', el);
-
+      this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
+        this.currentSala.reservas = responseAux;
+        this.currentSala.reservas.forEach(e => {
+          const el = {
+            start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
+            title: e.asunto,
+            end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
+          };
+          console.log('ELEMENTO', el);
+          if(!this.events.includes(el)){
             this.events.push(el);
-            this.loading = false;
-          });
+          }
         });
-
+      });
+      //TODO: comparar los eventos remotos con los actuales y añadir o eliminar solamente los necesarios
     }
-
-    setInterval(()=>this.redirectCalendar(), this.seconds*1000)
-
-  }
-
-  redirectCalendar() {
-    //window.location.reload();
-    this.loadEvents()   
+    $('ng-fullcalendar').fullCalendar('removeEvents');
+    $('ng-fullcalendar').fullCalendar('addEventSource', this.events);
   }
 
   getToast(info, mensaje, action) {
