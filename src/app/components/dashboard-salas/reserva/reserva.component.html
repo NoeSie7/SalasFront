@@ -129,6 +129,9 @@
                   <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime">Tiempo
                     de la repeticion en dias</label>
               </section>
+            </div>
+            <!-- Week days -->
+            <div *ngIf="reservaForm.get('periodic').value" class="col s8 offset-s4">
               <section class="week">
                 <p><input type="checkbox" id="all" (change)="checkAllDays($event)"/><label for="all">Todos</label></p>
                 <p *ngFor="let control of daysArray.controls; let i = index">

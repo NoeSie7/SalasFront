@@ -1,9 +1,9 @@
 @import '../../../../sass/components/variables';
 #modalCrear{
   .collection{
-    left: 10.5%;
+    left: 3rem;
     top: -27px;
-    width: 90%;
+    width: calc(100% - 3rem);
     @media #{$mq_tablet}{
       left: 21.5%;
       top: -27px;
