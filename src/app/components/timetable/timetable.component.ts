@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toast } from 'angular2-materialize';
-import { OptionsInput } from 'fullcalendar';
+import { OptionsInput, log } from 'fullcalendar';
 import * as $ from "jquery";
 // import moment = require('moment');
 import * as moment from 'moment';
@@ -20,9 +20,10 @@ export class TimetableComponent implements OnInit {
 
   private calendarOptions: OptionsInput;
   private date: Date;
-  public events = [];
+  private events = [];
+  private newEvents = [];
 
-  private seconds = 30;
+  private seconds = 5;
 
   public currentSala = new Sala();
   public currentSala$: Observable<Sala>;
@@ -33,7 +34,7 @@ export class TimetableComponent implements OnInit {
   public numberroom: Number;
 
 
-  private calendario: HTMLElement;
+  private calendario: JQuery<HTMLElement>;
 
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
@@ -42,7 +43,7 @@ export class TimetableComponent implements OnInit {
     private oficinaService: OficinaService) { }
 
   ngOnInit() {
-    //this.calendario = $('ng-fullcalendar');
+    this.calendario = $('ng-fullcalendar');
     this.calendarOptions = {
       height: 'auto',
       titleFormat: 'DD/MM/YYYY',
@@ -74,20 +75,15 @@ export class TimetableComponent implements OnInit {
       this.loadEvents()
     }, 100);
     setInterval(() => this.loadEvents(), this.seconds * 1000)
-
-  }
-
-  clearEvents() {
-    this.events = [];
   }
 
   loadEvents() {
-    this.clearEvents();
+    this.newEvents = [];
+    this.numberroom = this.route.snapshot.params.room;
+
     this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe(res => {
       this.salas = res;
-
     });
-    this.numberroom = this.route.snapshot.params.room;
 
     if (this.route.snapshot.params.room !== undefined) {
       this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
@@ -98,17 +94,33 @@ export class TimetableComponent implements OnInit {
             title: e.asunto,
             end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
           };
-          console.log('ELEMENTO', el);
-          if(!this.events.includes(el)){
-            this.events.push(el);
-          }
+          //console.log('ELEMENTO', el);
+          this.newEvents.push(el);
         });
+        this.renderEvents();
       });
-      //TODO: comparar los eventos remotos con los actuales y añadir o eliminar solamente los necesarios
     }
-    $('ng-fullcalendar').fullCalendar('removeEvents');
-    $('ng-fullcalendar').fullCalendar('addEventSource', this.events);
   }
+
+  renderEvents(){
+    // Filtra los eventos que no estan en el array devuelto por el servidor
+    let eventsToRemove = this.events.filter(e => this.newEvents.find(y => JSON.stringify(y) == JSON.stringify(e)) == undefined );
+
+    // Filtra los eventos que no estan en el array local
+    let eventsToAdd = this.newEvents.filter(e => this.events.find(y => JSON.stringify(y) == JSON.stringify(e)) == undefined );
+
+    // Actualiza el array local
+    this.events = this.events.concat(eventsToAdd);
+    eventsToRemove.forEach(e=> {
+      const i = this.events.findIndex(y=> JSON.stringify(y) == JSON.stringify(e));
+      this.events.splice(i,1);
+    })
+
+    // Dibuja el calendario
+    this.calendario.fullCalendar('renderEvents',eventsToAdd);
+    this.calendario.fullCalendar('removeEvents',eventsToRemove);
+  }
+
 
   getToast(info, mensaje, action) {
     const message = `${info} ${mensaje}`;
