@@ -23,7 +23,7 @@ export class TimetableComponent implements OnInit {
   private events = [];
   private newEvents = [];
 
-  private seconds = 5;
+  private seconds = 60;
 
   public currentSala = new Sala();
   public currentSala$: Observable<Sala>;
