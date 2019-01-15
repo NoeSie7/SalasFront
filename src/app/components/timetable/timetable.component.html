@@ -6,10 +6,11 @@
         </div>
       </div>
     </div>
+
     <!--se usa para centrar el calendario en dispositivos grandes-->
     <section class="col s0 l2"></section>
-    <div *ngIf="calendarOptions" id="calendario" class="col l8 s12">
+    <div id="calendario" class="col l8 s12">
         <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
-            (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
+            (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)" [(eventsModel)]="events"></ng-fullcalendar>
     </div>
 </div>

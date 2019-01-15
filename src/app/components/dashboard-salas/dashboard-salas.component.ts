@@ -194,6 +194,7 @@ export class DashboardSalasComponent implements OnInit {
   }
   loadSalas() {
     // cargamos la sala
+    console.log(this.currentDate)
     if (this.currentOficina.idOficina !== undefined) {
       this.oficinaService
         .getSalasByOficina(+this.route.snapshot.params.office)
@@ -204,6 +205,7 @@ export class DashboardSalasComponent implements OnInit {
           this.oficinaService.updateSalaList(salas);
         });
     }
+    //setInterval(()=>this.loadSalas(), 10000)
   }
 
   closeConfirmation() {
