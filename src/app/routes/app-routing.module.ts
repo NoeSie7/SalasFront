@@ -39,10 +39,10 @@ const routes: Routes = [
 
   // {path: 'office/:id', component: SalasComponent}, // Componente con las rutas a cada sala
   {path: 'office/:office', component: DashboardSalasComponent}, // Muestra todas las reservas de un lugar
-  {path: 'reservaitem', component: ReservaItemComponent}, // caca
-  {path: 'reserva', component: ReservaComponent}, // caca
+  {path: 'reservaitem', component: ReservaItemComponent},
+  {path: 'reserva', component: ReservaComponent},
   {path: 'select', component: SelectComponent},
-  {path: 'confirmation', component: ConfirmationPopupComponent}, // caca
+  {path: 'confirmation', component: ConfirmationPopupComponent},
   {path: 'about', component: AboutComponent},
   {path: 'main', component: MainContentComponent},
   {path: 'shell', component: ShellComponent},

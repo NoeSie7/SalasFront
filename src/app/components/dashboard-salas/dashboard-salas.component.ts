@@ -12,7 +12,7 @@ import { ReservaService } from '../service/reserva.service';
 import * as $ from 'jquery';
 import { toast } from 'angular2-materialize';
 import { SalaService } from '../service/sala.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { log } from 'util';
 
 @Component({
@@ -56,9 +56,10 @@ export class DashboardSalasComponent implements OnInit {
   public salas = new Array<Sala>();
   public salas$: Observable<Sala[]>;
 
+  private seconds = 20
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private sharedService: SharedService,
     private oficinaService: OficinaService,
     private reservaService: ReservaService,
@@ -67,19 +68,18 @@ export class DashboardSalasComponent implements OnInit {
 
   ngOnInit() {
     this.showNavbar();
-    this.sharedService.currentOficina.idOficina = +this.route.snapshot.params.office;
+    this.sharedService.currentOficina.idOficina = + this.route.snapshot.params.office;
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
     this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
       console.log('CURRENT OFICINA', currentOficina);
       this.currentOficina = currentOficina;
-      this.redirigirSinDatos();
-      this.loadSalas();
+      this.reload();
     });
 
     this.currentDate$ = this.sharedService.getCurrentDate$();
     this.sharedService.getCurrentDate$().subscribe(currentDate => {
       this.currentDate = currentDate;
-      this.loadSalas();
+      this.reload();
     });
 
     this.id = +this.route.snapshot.params.office;
@@ -176,11 +176,10 @@ export class DashboardSalasComponent implements OnInit {
     this.currentSala.idSala = +this.route.snapshot.params.room;
   } ////////////////////// ngOnInit()
 
-  redirigirSinDatos() {
-    // if (!this.currentOficina.idOficina) {
-    //   this.router.navigate(['']);
-    // }
+  reload() {
+    setInterval(() => this.loadSalas(), this.seconds * 1000)
   }
+
   cerrarModalSala() {
     this.showSala ? (this.showSala = false) : (this.showSala = true);
   }
@@ -205,7 +204,6 @@ export class DashboardSalasComponent implements OnInit {
           this.oficinaService.updateSalaList(salas);
         });
     }
-    //setInterval(()=>this.loadSalas(), 10000)
   }
 
   closeConfirmation() {

@@ -14,6 +14,7 @@ import { Oficina } from '../../_data/oficina.model';
 import { Reserva } from '../../_data/reserva.model';
 import { Sala } from '../../_data/sala.model';
 import { Usuario } from '../../_data/usuario.model';
+import { query } from '@angular/core/src/animation/dsl';
 
 
 @Component({
@@ -196,10 +197,11 @@ export class ReservaComponent implements OnInit {
         extension: reserva.usuario.extension != null ? reserva.usuario.extension : '',
         fecha: reserva.fecha,
         periodic: reserva.periodic || false,
-        periodicTime: reserva.periodicTime || 0,
+        periodicTime: reserva.periodicTime || null,
         horaDesde: reserva.horaDesde,
         horaHasta: reserva.horaHasta,
-        asunto: reserva.asunto != null ? reserva.asunto : 'Reserva de sala'
+        asunto: reserva.asunto != null ? reserva.asunto : 'Reserva de sala',
+        weekDays:[null,null,null,null,null]
       });
     }
   }
