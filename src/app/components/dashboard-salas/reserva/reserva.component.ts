@@ -14,7 +14,6 @@ import { Oficina } from '../../_data/oficina.model';
 import { Reserva } from '../../_data/reserva.model';
 import { Sala } from '../../_data/sala.model';
 import { Usuario } from '../../_data/usuario.model';
-import { query } from '@angular/core/src/animation/dsl';
 
 
 @Component({
