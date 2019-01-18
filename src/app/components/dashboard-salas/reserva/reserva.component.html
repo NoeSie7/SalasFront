@@ -75,7 +75,7 @@
 
             <label id="lblempleado" class="toChangeClassOnJqOnCloseSave" for="empleado" [ngClass]="{'active':  currentReserva.usuario.nombre?.length > 0}">Empleado</label>
             <!-- collection -->
-            <div class="collection" *ngIf="usuariosList.length > 0">
+            <div class="collection col s12" *ngIf="usuariosList.length > 0">
               <a class="collection-item" *ngFor="let usuario of usuariosList" (click)="selectUsuario(usuario.idUsuario)">{{usuario.nombre}}</a>
             </div>
             <small *ngIf="reservaForm.get('nombreUsuario').invalid">El empleado es obligatorio.</small>
@@ -129,6 +129,9 @@
                   <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime">Tiempo
                     de la repeticion en dias</label>
               </section>
+            </div>
+            <!-- Week days -->
+            <div *ngIf="reservaForm.get('periodic').value" class="col s8 offset-s4">
               <section class="week">
                 <p><input type="checkbox" id="all" (change)="checkAllDays($event)"/><label for="all">Todos</label></p>
                 <p *ngFor="let control of daysArray.controls; let i = index">

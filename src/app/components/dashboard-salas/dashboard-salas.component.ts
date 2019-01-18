@@ -56,8 +56,6 @@ export class DashboardSalasComponent implements OnInit {
   public salas = new Array<Sala>();
   public salas$: Observable<Sala[]>;
 
-  private seconds = 20
-
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
@@ -73,13 +71,13 @@ export class DashboardSalasComponent implements OnInit {
     this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
       console.log('CURRENT OFICINA', currentOficina);
       this.currentOficina = currentOficina;
-      this.reload();
+      this.loadSalas();
     });
 
     this.currentDate$ = this.sharedService.getCurrentDate$();
     this.sharedService.getCurrentDate$().subscribe(currentDate => {
       this.currentDate = currentDate;
-      this.reload();
+      this.loadSalas();
     });
 
     this.id = +this.route.snapshot.params.office;
@@ -175,10 +173,6 @@ export class DashboardSalasComponent implements OnInit {
     }
     this.currentSala.idSala = +this.route.snapshot.params.room;
   } ////////////////////// ngOnInit()
-
-  reload() {
-    setInterval(() => this.loadSalas(), this.seconds * 1000)
-  }
 
   cerrarModalSala() {
     this.showSala ? (this.showSala = false) : (this.showSala = true);
