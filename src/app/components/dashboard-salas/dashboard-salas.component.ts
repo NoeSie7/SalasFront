@@ -1,19 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { toast } from 'angular2-materialize';
+import * as $ from 'jquery';
 import { Observable } from 'rxjs/Observable';
-
 import { ConfirmationPopup } from '../confirmation-popup/confirmation-popup.model';
-import { Oficina } from '../_data/oficina.model';
-import { Sala } from '../_data/sala.model';
-import { Reserva } from '../_data/reserva.model';
-import { SharedService } from '../service/shared.service';
 import { OficinaService } from '../service/oficina.service';
 import { ReservaService } from '../service/reserva.service';
-
-import * as $ from 'jquery';
-import { toast } from 'angular2-materialize';
 import { SalaService } from '../service/sala.service';
-import { ActivatedRoute } from '@angular/router';
-import { log } from 'util';
+import { SharedService } from '../service/shared.service';
+import { Oficina } from '../_data/oficina.model';
+import { Reserva } from '../_data/reserva.model';
+import { Sala } from '../_data/sala.model';
+
+
 
 @Component({
   selector: 'app-dashboard-salas',
@@ -37,24 +36,17 @@ export class DashboardSalasComponent implements OnInit {
   ];
 
   private showSala: Boolean = false;
-  private nSala: number;
-  private id: number;
   @Input() confirmationPopup = new ConfirmationPopup();
 
   public currentDate = '';
-  public currentDate$: Observable<string>;
 
   public currentOficina = new Oficina();
-  public currentOficina$: Observable<Oficina>;
 
   public currentSala = new Sala();
-  public currentSala$: Observable<Sala>;
 
   public currentReserva = new Reserva();
-  public currentReserva$: Observable<Reserva>;
 
   public salas = new Array<Sala>();
-  public salas$: Observable<Sala[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,46 +59,28 @@ export class DashboardSalasComponent implements OnInit {
   ngOnInit() {
     this.showNavbar();
     this.sharedService.currentOficina.idOficina = + this.route.snapshot.params.office;
-    this.currentOficina$ = this.sharedService.getCurrentOficina$();
+
     this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
-      console.log('CURRENT OFICINA', currentOficina);
       this.currentOficina = currentOficina;
       this.loadSalas();
     });
 
-    this.currentDate$ = this.sharedService.getCurrentDate$();
     this.sharedService.getCurrentDate$().subscribe(currentDate => {
       this.currentDate = currentDate;
       this.loadSalas();
     });
+    this.loadSalas();
 
-    this.id = +this.route.snapshot.params.office;
-    console.log('IDSAL', this.id);
-
-    this.oficinaService.getSalasByOficina(this.id) // this.currentOficina.idOficina
-      .subscribe(salas => {
-        console.log('SALAS', salas);
-        this.salas = salas;
-        this.sharedService.updateSalas(salas);
-        this.oficinaService.updateSalaList(salas);
-      });
-
-    this.currentSala$ = this.sharedService.getCurrentSala$();
     this.sharedService.getCurrentSala$().subscribe(currentSala => {
-      console.log('CURRENT SALA', currentSala);
       this.currentSala = currentSala;
     });
 
-    this.currentReserva$ = this.sharedService.getCurrentReserva$();
     this.sharedService.getCurrentReserva$().subscribe(currentReserva => {
-      console.log('CURRENT reserva', currentReserva);
       this.currentReserva = currentReserva;
     });
 
-    console.log('ROOM', this.route.snapshot.params.room);
 
     if (this.route.snapshot.params.room !== undefined) {
-      console.log('PARAM ROUTE', this.route.snapshot.params.room);
 
       this.reservaService
         .getReservasBySalaAndDate(
@@ -114,20 +88,14 @@ export class DashboardSalasComponent implements OnInit {
           this.sharedService.currentDate
         )
         .subscribe(responseAux => {
-          console.log('RESPONSEAUX', responseAux);
           if (
             responseAux.result === 'Success' &&
             responseAux.mensaje === 'Success'
           ) {
             this.restarHoras(responseAux.reservaAuxList);
             this.currentSala.reservas = responseAux.reservaAuxList;
-            console.log('RESERVA', this.currentSala.reservas);
-            console.log('CURRENT SALA RESERVA', this.currentSala);
-
             this.salas.forEach(e => {
-              console.log('E1', e);
               if (e.idSala === +this.route.snapshot.params.room) {
-                console.log('E2', e);
                 this.salas = [];
                 this.salas.push(e);
               }
@@ -140,17 +108,12 @@ export class DashboardSalasComponent implements OnInit {
         });
 
     } else {
-      this.salas$ = this.sharedService.getSalas$();
-      console.log('SALAS$', this.salas$);
-
       this.sharedService.getSalas$().subscribe(salas => {
         this.salas = salas;
-        console.log('ELSE SALAS', this.salas);
         // loads reservas of each sala
         if (!(salas instanceof Observable)) {
           salas.forEach(sala => {
 
-            console.log('FOREACH', sala);
             if (sala.idSala !== undefined) {
               this.reservaService
                 .getReservasBySalaAndDate(
@@ -178,22 +141,17 @@ export class DashboardSalasComponent implements OnInit {
     this.showSala ? (this.showSala = false) : (this.showSala = true);
   }
   modalDatosSala(event) {
-    console.log('Event', event);
-
     const target = event.target || event.srcElement || event.currentTarget;
-    this.nSala = target.attributes.id.nodeValue;
-
+    //this.nSala = target.attributes.id.nodeValue;
     this.showSala ? (this.showSala = false) : (this.showSala = true);
   }
+
   loadSalas() {
     // cargamos la sala
-    console.log(this.currentDate)
     if (this.currentOficina.idOficina !== undefined) {
       this.oficinaService
-        .getSalasByOficina(+this.route.snapshot.params.office)
+        .getSalasByOficina(+this.currentOficina.idOficina)
         .subscribe(salas => {
-          console.log('SALAS', salas);
-
           this.sharedService.updateSalas(salas);
           this.oficinaService.updateSalaList(salas);
         });
