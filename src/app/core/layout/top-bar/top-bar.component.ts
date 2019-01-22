@@ -55,6 +55,9 @@ export class TopBarComponent implements OnInit {
 
   selectOficina(idOficina) {
     // gets selected oficina and set it as current
+    let  x = window.location.href.split('/');
+    x[x.length - 1] = idOficina;
+    window.location.href = x.toString().replace(/,/g,'/')
     this.resultsEnable = false;
     const selectedOficina = this.oficinas.find(x => x.idOficina === idOficina);
     this.searchOficinaInput = selectedOficina.nombreOficina;
