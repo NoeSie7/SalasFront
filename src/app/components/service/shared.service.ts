@@ -121,7 +121,7 @@ export class SharedService {
     return this.salas$.asObservable();
   }
 
-  updateCurrentDate(date :any = null) {
+  updateCurrentDate(date: any = null) {
     if (!date) {
       date = new Date();
       date = date.toISOString().substr(0, 10);
@@ -130,7 +130,7 @@ export class SharedService {
     this.emitCurrentDate();
   }
 
-  updateStartHour(horaDesde :any = null) {
+  updateStartHour(horaDesde: any = null) {
     if (!horaDesde) {
       horaDesde = new Date().toTimeString().substr(0, 5);
     }
@@ -138,9 +138,9 @@ export class SharedService {
     this.emitCurrentHoraDesde();
   }
 
-  updateEndHour(horaHasta :any = null) {
+  updateEndHour(horaHasta: any = null) {
     if (!horaHasta) {
-       horaHasta = new Date().toTimeString().substr(0, 5);
+      horaHasta = new Date().toTimeString().substr(0, 5);
     }
     this.currentHoraHasta = horaHasta;
     this.emitCurrentHoraHasta();
@@ -156,10 +156,10 @@ export class SharedService {
     this.emitCurrentSala();
   }
 
-  updateCurrentReserva(reserva, idSala: number = 0) {
+  updateCurrentReserva(reserva: Reserva, idOficina: number = 0) {
     if (reserva == null && this.currentSala != null) {
       reserva = new Reserva();
-      reserva.idSala = idSala;
+      reserva.idOficina = idOficina;
       this.updateStartHour();
       this.updateEndHour();
       reserva.fecha = this.getCurrentDate();
@@ -171,11 +171,8 @@ export class SharedService {
         this.setCurrentHoraHasta(reserva.horaHasta);
       }
     }
-    // reserva.fecha = this.getCurrentDateForHtml();
-    // reserva.horaDesde = this.getCurrentHoraDesde();
-    // reserva.horaHasta = this.getCurrentHoraHasta();
 
-    if(reserva.asunto == null || reserva.asunto == "") reserva.asunto = "Reserva de sala"
+    if (reserva.asunto == null || reserva.asunto === '') { reserva.asunto = 'Reserva de sala'; }
     this.currentReserva = reserva;
     this.emitCurrentReserva();
   }
