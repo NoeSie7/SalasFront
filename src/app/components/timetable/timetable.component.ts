@@ -33,6 +33,8 @@ export class TimetableComponent implements OnInit {
   public salas$: Observable<Sala[]>;
   public numberroom: Number;
 
+  private currentOffice: String;
+  private resultFound: Boolean = false;
 
   private calendario: JQuery<HTMLElement>;
 
@@ -80,25 +82,45 @@ export class TimetableComponent implements OnInit {
   loadEvents() {
     this.newEvents = [];
     this.numberroom = this.route.snapshot.params.room;
+    this.resultFound = false;
+
+    this.oficinaService.getOficinas().subscribe(res => {
+      res.forEach(e => {
+        if(e.idOficina == this.route.snapshot.params.office)
+          this.currentOffice = e.nombreOficina
+      })
+    });
 
     this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe(res => {
       this.salas = res;
+      res.forEach(office_ => {
+        if (this.route.snapshot.params.room !== undefined) {
+          this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
+            
+            this.currentSala.reservas = responseAux;
+            this.currentSala.reservas.forEach(e => {
+
+              if(office_.idSala == e.idSala) {
+
+                this.resultFound = true;
+
+              const el = {
+                start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
+                title: `${e.asunto}\t\t\t(${e.usuario.nombre})`,
+                end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
+              };
+              this.newEvents.push(el);
+              }
+            });
+            this.renderEvents();
+          
+          });
+        }
+      })
     });
 
-    if (this.route.snapshot.params.room !== undefined) {
-      this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
-        this.currentSala.reservas = responseAux;
-        this.currentSala.reservas.forEach(e => {
-          const el = {
-            start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
-            title: `${e.asunto}\t\t\t(${e.usuario.nombre})`,
-            end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
-          };
-          this.newEvents.push(el);
-        });
-        this.renderEvents();
-      });
-    }
+    
+
   }
 
   renderEvents() {
