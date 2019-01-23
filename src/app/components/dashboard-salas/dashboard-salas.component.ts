@@ -30,11 +30,7 @@ export class DashboardSalasComponent implements OnInit {
   public currentSala = new Sala();
   public currentReserva = new Reserva();
   public salas = new Array<Sala>();
-<<<<<<< HEAD
-  public salas$: Observable<Sala[]>;
-=======
   public nSala: number;
->>>>>>> corrections
 
   constructor(
     private route: ActivatedRoute,
