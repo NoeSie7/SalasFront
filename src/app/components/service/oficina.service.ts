@@ -18,8 +18,11 @@ export class OficinaService {
 
   constructor(private http: Http) {  }
 
-  getCurrentOficina(): Oficina {
-    return this.currentOficina;
+  getCurrentOficina(idOficina): Observable<Oficina> {
+    //return this.currentOficina;
+    console.log(idOficina)
+    return this.http.get(environment.urlBackBase + '/getOficinaById/' + idOficina)
+    .map(res => res.json());
   }
 
   getOficinas(): Observable<Oficina[]> {
