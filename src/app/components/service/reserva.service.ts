@@ -81,25 +81,16 @@ export class ReservaService {
   }
 
   checkAvailability(horaDesde, horaHasta, reserva): Observable<any> {
-    console.log("llamar servicio comprobar disponibilidad");
-    
+       
     reserva.horaDesde = horaDesde;
-    reserva.horaHasta = horaHasta;
-
-
-    console.log(reserva.idSala);
-    console.log(reserva.horaDesde);
-    console.log(reserva.horaHasta);
-    
+    reserva.horaHasta = horaHasta;    
     
     reserva.fecha = this.getFormatedDateForRest(reserva.fecha);
 
-    console.log(reserva);
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({headers: headers});
     return this.http.post(environment.urlBackBase + '/checkAvailability', JSON.stringify(reserva), options)
     .map(res => { 
-      console.log(res); 
       return res.json()
     });
 
