@@ -20,33 +20,17 @@ import { Sala } from '../_data/sala.model';
   styleUrls: ['./dashboard-salas.component.scss']
 })
 export class DashboardSalasComponent implements OnInit {
-  public hours: Array<string> = [
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00'
-  ];
 
+  public hours: string[] = [];
   private showSala: Boolean = false;
   @Input() confirmationPopup = new ConfirmationPopup();
 
   public currentDate = '';
-
   public currentOficina = new Oficina();
-
   public currentSala = new Sala();
-
   public currentReserva = new Reserva();
-
   public salas = new Array<Sala>();
+  public nSala: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,8 +41,13 @@ export class DashboardSalasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    for (let i = 8; i < 20; i++) {
+      this.hours.push(`${i < 10 ? 0 : ''}${i}:00`);
+    }
     this.showNavbar();
-    this.sharedService.currentOficina.idOficina = + this.route.snapshot.params.office;
+    this.oficinaService.updateCurrentOficina(this.route.snapshot.params.office).subscribe(e => {
+      this.sharedService.updateCurrentOficina(e);
+    });
 
     this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
       this.currentOficina = currentOficina;
@@ -142,8 +131,11 @@ export class DashboardSalasComponent implements OnInit {
   }
   modalDatosSala(event) {
     const target = event.target || event.srcElement || event.currentTarget;
-    //this.nSala = target.attributes.id.nodeValue;
-    this.showSala ? (this.showSala = false) : (this.showSala = true);
+    this.nSala = target.attributes.id.nodeValue;
+    console.log(this.currentOficina);
+
+    // this.showSala ? (this.showSala = false) : (this.showSala = true);
+    this.showSala = !this.showSala;
   }
 
   loadSalas() {
