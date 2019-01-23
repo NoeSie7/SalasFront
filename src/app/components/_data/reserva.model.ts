@@ -3,6 +3,7 @@ export class Reserva {
 
     public idReserva: number;
     public idSala: number;
+    public idOficina: number;
     public usuario: Usuario;
     public fecha: string;
     public periodic: boolean;

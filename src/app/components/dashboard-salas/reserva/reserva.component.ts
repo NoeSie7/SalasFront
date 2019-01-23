@@ -14,7 +14,6 @@ import { Oficina } from '../../_data/oficina.model';
 import { Reserva } from '../../_data/reserva.model';
 import { Sala } from '../../_data/sala.model';
 import { Usuario } from '../../_data/usuario.model';
-import { query } from '@angular/core/src/animation/dsl';
 
 
 @Component({
@@ -276,7 +275,7 @@ export class ReservaComponent implements OnInit {
     // updates reserva object with form data
     this.currentReserva = this.getFormData(this.reservaForm.value);
     this.sharedService.updateCurrentReserva(this.currentReserva);
-    if (this.currentReserva.idSala === 0) {
+    if (this.currentReserva.idSala === 0 || isNaN(this.currentReserva.idSala) || this.currentReserva.idSala === null) {
       // opens confirmation dialog
       const confirmation = new ConfirmationPopup();
       confirmation.title = 'Faltan datos';
