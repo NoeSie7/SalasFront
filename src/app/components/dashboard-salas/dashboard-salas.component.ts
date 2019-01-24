@@ -30,10 +30,7 @@ export class DashboardSalasComponent implements OnInit {
   public currentSala = new Sala();
   public currentReserva = new Reserva();
   public salas = new Array<Sala>();
-<<<<<<< HEAD
-=======
   public nSala: number;
->>>>>>> dev
 
   constructor(
     private route: ActivatedRoute,
@@ -134,16 +131,11 @@ export class DashboardSalasComponent implements OnInit {
   }
   modalDatosSala(event) {
     const target = event.target || event.srcElement || event.currentTarget;
-<<<<<<< HEAD
-    // this.nSala = target.attributes.id.nodeValue;
-    this.showSala ? (this.showSala = false) : (this.showSala = true);
-=======
     this.nSala = target.attributes.id.nodeValue;
     console.log(this.currentOficina);
 
     // this.showSala ? (this.showSala = false) : (this.showSala = true);
     this.showSala = !this.showSala;
->>>>>>> dev
   }
 
   loadSalas() {
