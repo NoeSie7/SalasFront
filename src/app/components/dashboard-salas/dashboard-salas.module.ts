@@ -11,16 +11,23 @@ import { ConfirmationPopupComponent } from '../confirmation-popup/confirmation-p
 import { ReservaComponent } from './reserva/reserva.component';
 import { ReservaItemComponent } from './reserva-item/reserva-item.component';
 import { SelectComponent } from './reserva/select/select.component';
-
+import { ReduceDayNamePipe } from '../_data/reduce-day-name.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     DashboardSalasRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
-  declarations: [DashboardSalasComponent, ReservaComponent, ReservaItemComponent, ConfirmationPopupComponent, SelectComponent],
+  declarations: [
+    DashboardSalasComponent,
+    ReservaComponent,
+    ReservaItemComponent,
+    ConfirmationPopupComponent,
+    SelectComponent,
+    ReduceDayNamePipe
+  ],
   providers: [FormsToolsService, ValidatorsService],
   exports: [DashboardSalasComponent]
 })

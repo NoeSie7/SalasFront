@@ -103,14 +103,14 @@
         </div>
         <div class="row">
           <!-- subject -->
-          <div class="input-field col s4">
+          <div class="input-field col s8 l10 asunto">
             <i class="material-icons prefix">subject</i>
             <textarea *ngIf="!sharedService.isConsulting" id="asunto" type="text" class="materialize-textarea"
               maxlength="250" formControlName="asunto"></textarea>
             <label [ngClass]="{'active': currentReserva.asunto?.length > 0 }" for="asunto">Asunto</label>
           </div>
 
-          <div class="switch col s2">
+          <div class="switch col s4 l2">
             <label>
               <p>Reserva Periodica</p>
               <i class="material-icons">alarm_off</i>
@@ -120,26 +120,30 @@
             </label>
 
           </div>
+
+        </div>
+        <div class="row repeat-row">
           <!-- Periodic time -->
-            <div *ngIf="reservaForm.get('periodic').value" class="col s6">
-              <section class="input-field">
-                  <i class="material-icons prefix">repeat</i>
-                  <input id="periodicTime" type="text" class="validate" formControlName="periodicTime" pattern="[0-9]*" min="1"
-                    max="10" maxlength="2">
-                  <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime">Tiempo
-                    de la repeticion en dias</label>
-              </section>
-            </div>
-            <!-- Week days -->
-            <div *ngIf="reservaForm.get('periodic').value" class="col s8 offset-s4">
-              <section class="week">
-                <p><input type="checkbox" id="all" (change)="checkAllDays($event)"/><label for="all">Todos</label></p>
-                <p *ngFor="let control of daysArray.controls; let i = index">
-                  <input type="checkbox" [formControl]="control" id="day{{i}}"/>
-                  <label for="day{{i}}">{{weekDays[i].name}}</label>
-                </p>
+          <div *ngIf="reservaForm.get('periodic').value" class="col s4">
+            <section class="input-field">
+              <i class="material-icons prefix">repeat</i>
+              <input id="periodicTime" type="text" class="validate" formControlName="periodicTime" pattern="[0-9]*" min="1"
+                max="10" maxlength="2">
+              <label id="lblperiodicTime" [ngClass]="{'active': currentReserva.periodicTime?.length > 0 }" for="periodicTime">Días de repetición</label>
             </section>
           </div>
+          <!-- Week days -->
+          <div *ngIf="reservaForm.get('periodic').value" class="col s8 week">
+            <section>
+              <p><input type="checkbox" id="all" (change)="checkAllDays($event)" /><label for="all">Todos</label></p>
+              <p *ngFor="let control of daysArray.controls; let i = index">
+                <input type="checkbox" [formControl]="control" id="day{{i}}" />
+                <label for="day{{i}}">{{weekDays[i].name |reduceDayName}}</label>
+              </p>
+            </section>
+          </div>
+        </div>
+        <div class="row">
           <div class="col s12" *ngIf="!sharedService.isConsulting">
             <button id="button-action-save" type="submit" (click)="save()" value="Guardar" [disabled]="!reservaForm.valid"
               data-target="modalConfirmation" class="btn modal-trigger waves-effect waves-light">Guardar</button>
@@ -147,7 +151,6 @@
               data-target="modalConfirmation" class="btn modal-trigger waves-effect waves-light">Eliminar</button>
           </div>
         </div>
-
       </div>
     </div>
     <!-- footer -->

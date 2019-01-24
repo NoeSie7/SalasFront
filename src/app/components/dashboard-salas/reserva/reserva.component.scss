@@ -123,7 +123,22 @@ button{
   display: none;
 }
 
-.week{
+.repeat-row{
   display: flex;
-  justify-content: space-between;
+  align-items: flex-end;
+  & .week{
+    margin-bottom: .5rem;
+    & > section{
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+.asunto{
+  margin-top:1.75rem;
+}
+
+.switch, .switch p{
+  text-align: end;
 }

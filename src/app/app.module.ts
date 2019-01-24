@@ -1,30 +1,28 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { MaterializeModule } from 'angular2-materialize';
-import { FormsToolsService } from './core/shared/forms/forms-tools.service';
-import { ValidatorsService } from './core/shared/forms/validators.service';
-
+import { FullCalendarModule } from 'ng-fullcalendar';
 import { AppComponent } from './app.component';
-import { LayoutModule } from './core/layout/layout.module';
-import { SharedService } from './components/service/shared.service';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { OficinaService } from './components/service/oficina.service';
 import { ReservaService } from './components/service/reserva.service';
-import { UsuarioService } from './components/service/usuario.service';
 import { SalaService } from './components/service/sala.service';
-import {SalasComponent} from './components/salas/salas.component';
-
-import { AppRoutingModule } from './routes/app-routing.module';
-import { RouterModule } from '@angular/router';
+import { SharedService } from './components/service/shared.service';
+import { UsuarioService } from './components/service/usuario.service';
 import { TimetableComponent } from './components/timetable/timetable.component';
-import { FullCalendarModule } from 'ng-fullcalendar';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { LayoutModule } from './core/layout/layout.module';
+import { FormsToolsService } from './core/shared/forms/forms-tools.service';
+import { ValidatorsService } from './core/shared/forms/validators.service';
+import { AppRoutingModule } from './routes/app-routing.module';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     TimetableComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
