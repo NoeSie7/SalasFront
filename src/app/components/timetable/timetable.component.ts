@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toast } from 'angular2-materialize';
 import { OptionsInput, log } from 'fullcalendar';
-import * as $ from "jquery";
+import * as $ from 'jquery';
 // import moment = require('moment');
 import * as moment from 'moment';
 import { CalendarComponent } from 'ng-fullcalendar';
@@ -33,6 +33,8 @@ export class TimetableComponent implements OnInit {
   public salas$: Observable<Sala[]>;
   public numberroom: Number;
 
+  private currentOffice: String;
+  private resultFound: Boolean = false;
 
   private calendario: JQuery<HTMLElement>;
 
@@ -72,53 +74,72 @@ export class TimetableComponent implements OnInit {
       maxTime: moment.duration('20:00:00'),
     };
     setTimeout(() => {
-      this.loadEvents()
+      this.loadEvents();
     }, 100);
-    setInterval(() => this.loadEvents(), this.seconds * 1000)
+    setInterval(() => this.loadEvents(), this.seconds * 1000);
   }
 
   loadEvents() {
     this.newEvents = [];
     this.numberroom = this.route.snapshot.params.room;
+    this.resultFound = false;
+
+    this.oficinaService.getOficinas().subscribe(res => {
+      res.forEach(e => {
+        if(e.idOficina == this.route.snapshot.params.office)
+          this.currentOffice = e.nombreOficina
+      })
+    });
 
     this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe(res => {
       this.salas = res;
+      res.forEach(office_ => {
+        if (this.route.snapshot.params.room !== undefined) {
+          this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
+            
+            this.currentSala.reservas = responseAux;
+            this.currentSala.reservas.forEach(e => {
+
+              if(office_.idSala == e.idSala) {
+
+                this.resultFound = true;
+
+              const el = {
+                start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
+                title: `${e.asunto}\t\t\t(${e.usuario.nombre})`,
+                end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
+              };
+              this.newEvents.push(el);
+              }
+            });
+            this.renderEvents();
+          
+          });
+        }
+      })
     });
 
-    if (this.route.snapshot.params.room !== undefined) {
-      this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
-        this.currentSala.reservas = responseAux;
-        this.currentSala.reservas.forEach(e => {
-          const el = {
-            start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
-            title: e.asunto,
-            end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
-          };
-          //console.log('ELEMENTO', el);
-          this.newEvents.push(el);
-        });
-        this.renderEvents();
-      });
-    }
+    
+
   }
 
-  renderEvents(){
+  renderEvents() {
     // Filtra los eventos que no estan en el array devuelto por el servidor
-    let eventsToRemove = this.events.filter(e => this.newEvents.find(y => JSON.stringify(y) == JSON.stringify(e)) == undefined );
+    const eventsToRemove = this.events.filter(e => this.newEvents.find(y => JSON.stringify(y) === JSON.stringify(e)) === undefined );
 
     // Filtra los eventos que no estan en el array local
-    let eventsToAdd = this.newEvents.filter(e => this.events.find(y => JSON.stringify(y) == JSON.stringify(e)) == undefined );
+    const eventsToAdd = this.newEvents.filter(e => this.events.find(y => JSON.stringify(y) === JSON.stringify(e)) === undefined );
 
     // Actualiza el array local
     this.events = this.events.concat(eventsToAdd);
-    eventsToRemove.forEach(e=> {
-      const i = this.events.findIndex(y=> JSON.stringify(y) == JSON.stringify(e));
-      this.events.splice(i,1);
-    })
+    eventsToRemove.forEach(e => {
+      const i = this.events.findIndex(y => JSON.stringify(y) === JSON.stringify(e));
+      this.events.splice(i, 1);
+    });
 
     // Dibuja el calendario
-    this.calendario.fullCalendar('renderEvents',eventsToAdd);
-    this.calendario.fullCalendar('removeEvents',eventsToRemove);
+    this.calendario.fullCalendar('renderEvents', eventsToAdd);
+    this.calendario.fullCalendar('removeEvents', eventsToRemove);
   }
 
 

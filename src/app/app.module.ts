@@ -18,11 +18,13 @@ import { AppRoutingModule } from './routes/app-routing.module';
 import { RouterModule } from '@angular/router';
 import { TimetableComponent } from './components/timetable/timetable.component';
 import { FullCalendarModule } from 'ng-fullcalendar';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TimetableComponent
+    TimetableComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
