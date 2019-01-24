@@ -15,14 +15,12 @@ import { Reserva } from '../../_data/reserva.model';
 import { Sala } from '../../_data/sala.model';
 import { Usuario } from '../../_data/usuario.model';
 
-
 @Component({
   selector: 'app-reserva',
   templateUrl: './reserva.component.html',
-  styleUrls: ['./reserva.component.scss'],
+  styleUrls: ['./reserva.component.scss']
 })
 export class ReservaComponent implements OnInit {
-
   private valorSelect: number;
   @Input() confirmationPopup: ConfirmationPopup;
   @Output() confirmationPopupChange = new EventEmitter<ConfirmationPopup>();
@@ -58,8 +56,8 @@ export class ReservaComponent implements OnInit {
     private sharedService: SharedService,
     private usuarioService: UsuarioService,
     private reservaService: ReservaService,
-    private oficinaService: OficinaService) {
-
+    private oficinaService: OficinaService
+  ) {
     // initialize variables
     this.usuariosList = new Array<Usuario>();
     this.searchDateReservaInput = this.getDateForHtml();
@@ -85,32 +83,29 @@ export class ReservaComponent implements OnInit {
       {
         name: 'viernes',
         value: 6
-      },
+      }
     ];
   }
 
   ngOnInit() {
     this.currentOficina$ = this.sharedService.getCurrentOficina$();
-    this.sharedService.getCurrentOficina$()
-      .subscribe(currentOficina => {
-        this.currentOficina = currentOficina;
-      });
+    this.sharedService.getCurrentOficina$().subscribe(currentOficina => {
+      this.currentOficina = currentOficina;
+    });
 
     this.currentSala$ = this.sharedService.getCurrentSala$();
-    this.sharedService.getCurrentSala$()
-      .subscribe(currentSala => {
-        this.currentSala = currentSala;
-      });
+    this.sharedService.getCurrentSala$().subscribe(currentSala => {
+      this.currentSala = currentSala;
+    });
 
     this.currentReserva$ = this.sharedService.getCurrentReserva$();
-    this.sharedService.getCurrentReserva$()
-      .subscribe(currentReserva => {
-        this.currentReserva = currentReserva;
-        // rebuilds form with currentReserva changed
-        if (this.currentReserva != null) {
-          this.buildForm();
-        }
-      });
+    this.sharedService.getCurrentReserva$().subscribe(currentReserva => {
+      this.currentReserva = currentReserva;
+      // rebuilds form with currentReserva changed
+      if (this.currentReserva != null) {
+        this.buildForm();
+      }
+    });
     // builds form controls
 
     if (this.valorSelect === undefined) {
@@ -131,56 +126,34 @@ export class ReservaComponent implements OnInit {
   }
 
   addDaysControls() {
-    return this.formBuilder.array(this.weekDays.map(e => this.formBuilder.control(false)));
+    return this.formBuilder.array(
+      this.weekDays.map(e => {
+        console.log('Days', e);
+        this.formBuilder.control(false);
+      })
+    );
   }
 
   initControls() {
     const controls = {
-      idReserva: [
-        this.currentReserva.idReserva
-      ],
-      idSala: [
-        this.currentReserva.idSala
-      ],
-      idUsuario: [
-        this.currentReserva.usuario.idUsuario
-      ],
-      nombreUsuario: [
-        this.currentReserva.usuario.nombre,
-        Validators.required
-      ],
+      idReserva: [this.currentReserva.idReserva],
+      idSala: [this.currentReserva.idSala],
+      idUsuario: [this.currentReserva.usuario.idUsuario],
+      nombreUsuario: [this.currentReserva.usuario.nombre, Validators.required],
       email: [
         this.currentReserva.usuario.email,
         [Validators.required, this.validatorsService.formatemail]
       ],
-      periodic: [
-        this.currentReserva.periodic
-      ],
-      periodicTime: [
-        this.currentReserva.periodicTime
-      ],
+      periodic: [this.currentReserva.periodic],
+      periodicTime: [this.currentReserva.periodicTime],
       weekDays: this.addDaysControls(),
-      extension: [
-        this.currentReserva.usuario.extension
-      ],
-      fecha: [
-        this.currentReserva.fecha,
-        Validators.required
-      ],
-      horaDesde: [
-        this.currentReserva.horaDesde,
-        Validators.required
-      ],
-      horaHasta: [
-        this.currentReserva.horaHasta,
-        Validators.required
-      ],
-      asunto: [
-        this.currentReserva.asunto
-      ]
+      extension: [this.currentReserva.usuario.extension],
+      fecha: [this.currentReserva.fecha, Validators.required],
+      horaDesde: [this.currentReserva.horaDesde, Validators.required],
+      horaHasta: [this.currentReserva.horaHasta, Validators.required],
+      asunto: [this.currentReserva.asunto]
     };
     return controls;
-
   }
 
   loadForm(reserva: Reserva) {
@@ -193,7 +166,8 @@ export class ReservaComponent implements OnInit {
         idUsuario: reserva.usuario.idUsuario,
         nombreUsuario: reserva.usuario.nombre,
         email: reserva.usuario.email,
-        extension: reserva.usuario.extension != null ? reserva.usuario.extension : '',
+        extension:
+          reserva.usuario.extension != null ? reserva.usuario.extension : '',
         fecha: reserva.fecha,
         periodic: reserva.periodic || false,
         periodicTime: reserva.periodicTime || null,
@@ -224,7 +198,7 @@ export class ReservaComponent implements OnInit {
         }
       });
       retVal.weekDays = days.length > 0 ? days : null;
-    }else {
+    } else {
       retVal.periodic = false;
       retVal.periodicTime = 0;
     }
@@ -241,21 +215,26 @@ export class ReservaComponent implements OnInit {
       this.usuariosList = new Array<Usuario>();
       return;
     }
-    this.usuarioService.getUsuariosByNombre(this.reservaForm.value.nombreUsuario).subscribe(
-      (data: Usuario[]) => {
+    this.usuarioService
+      .getUsuariosByNombre(this.reservaForm.value.nombreUsuario)
+      .subscribe((data: Usuario[]) => {
         this.usuariosList = data;
       });
   }
 
   selectUsuario(idUsuario) {
-    if (idUsuario == null) { // if idUsuario is null resets usuario's fields
+    if (idUsuario == null) {
+      // if idUsuario is null resets usuario's fields
       this.reservaForm.patchValue({
         idUsuario: null,
         email: '',
         extension: ''
       });
-    } else { // else searches selected usuario
-      const selectedUsuario = this.usuariosList.find(x => x.idUsuario === idUsuario);
+    } else {
+      // else searches selected usuario
+      const selectedUsuario = this.usuariosList.find(
+        x => x.idUsuario === idUsuario
+      );
       // refresh form values
       this.reservaForm.patchValue({
         idUsuario: selectedUsuario.idUsuario,
@@ -277,18 +256,38 @@ export class ReservaComponent implements OnInit {
     this.sharedService.updateCurrentReserva(this.currentReserva);
     // opens confirmation dialog
     const confirmation = new ConfirmationPopup();
-    if (this.currentReserva.idSala === 0 || isNaN(this.currentReserva.idSala) || this.currentReserva.idSala === null) {
+    if (
+      this.currentReserva.idSala === 0 ||
+      isNaN(this.currentReserva.idSala) ||
+      this.currentReserva.idSala === null
+    ) {
       confirmation.title = 'Faltan datos';
       confirmation.message = 'No ha seleccionado la sala';
       confirmation.action = '';
       confirmation.active = false;
-    } else if (this.currentReserva.periodic && (this.currentReserva.periodicTime > 10
-                || this.currentReserva.periodicTime <= 0 || this.currentReserva.periodicTime === null)) {
+      this.confirmationPopupChange.emit(confirmation);
+    } else if (
+      this.currentReserva.periodic &&
+      (this.currentReserva.periodicTime > 10 ||
+        this.currentReserva.periodicTime <= 0 ||
+        this.currentReserva.periodicTime === null)
+    ) {
+      // opens confirmation dialog
+      const checkAllInput: HTMLInputElement = document.querySelector('#all');
+      checkAllInput.checked = false;
       confirmation.title = 'Reserva Periodica incorrecta';
-      confirmation.message = 'Inserte la repeticion de la reserva hasta un máximo de 10 dias laborables';
+      confirmation.message =
+        'Inserte la repeticion de la reserva hasta un máximo de 10 dias laborables';
       confirmation.action = '';
       confirmation.active = false;
-    }else {
+    } else {
+      // opens confirmation dialog
+      this.currentReserva.weekDays.forEach((e, i) => {
+        this.reservaForm.get('weekDays').value[e - 2] = this.weekDays[e - 2]; // Restamos 2 para que coincidad weekDays con ReservaForm
+      });
+      this.reservaForm.get('weekDays').value.forEach((e: Object, i: number) => {
+        this.daysArray.controls[i].setValue(e);
+      });
       confirmation.title = 'Confirmación de reserva';
       confirmation.message = '¿Está seguro que desea guardar los cambios?';
       confirmation.action = 'save';
@@ -297,18 +296,17 @@ export class ReservaComponent implements OnInit {
     this.confirmationPopupChange.emit(confirmation);
   }
 
-    delete() {
-      // updates reserva object with selected
-      this.sharedService.updateCurrentReserva(this.currentReserva);
-      // opens confirmation dialog
-      const confirmation = new ConfirmationPopup();
-      confirmation.title = 'Eliminación de reserva';
-      confirmation.message = '¿Está seguro que desea eliminar la reserva?';
-      confirmation.action = 'delete';
-      confirmation.active = true;
-      this.confirmationPopupChange.emit(confirmation);
-    }
-
+  delete() {
+    // updates reserva object with selected
+    this.sharedService.updateCurrentReserva(this.currentReserva);
+    // opens confirmation dialog
+    const confirmation = new ConfirmationPopup();
+    confirmation.title = 'Eliminación de reserva';
+    confirmation.message = '¿Está seguro que desea eliminar la reserva?';
+    confirmation.action = 'delete';
+    confirmation.active = true;
+    this.confirmationPopupChange.emit(confirmation);
+  }
 
   getCurrentDate() {
     return this.sharedService.getCurrentDate();
@@ -327,9 +325,10 @@ export class ReservaComponent implements OnInit {
   }
 
   searchDateChange() {
-    this.searchDateReservaInput = document.getElementById('search-date-reserva-input').getAttribute('value');
+    this.searchDateReservaInput = document
+      .getElementById('search-date-reserva-input')
+      .getAttribute('value');
     this.sharedService.updateStartHour(this.searchDateReservaInput);
-
   }
   getToast(info, mensaje, action) {
     const message = `${info} ${mensaje}`;
@@ -338,59 +337,74 @@ export class ReservaComponent implements OnInit {
   }
 
   ckeckReservaDesdeHasta() {
-    return  (this.currentHoraDesde !== '') && (this.currentHoraHasta !== '');
+    return this.currentHoraDesde !== '' && this.currentHoraHasta !== '';
   }
 
   currentReservationData() {
     this.currentReserva.idSala = this.reservaForm.get('idSala').value;
 
     if (this.currentReserva.idSala === 0) {
-      this.getToast('', 'Debe elegir una sala para comprobar disponibilidad', 'red');
+      this.getToast(
+        '',
+        'Debe elegir una sala para comprobar disponibilidad',
+        'red'
+      );
     }
 
     this.currentReserva.fecha = this.reservaForm.get('fecha').value;
 
-    this.reservaService.checkAvailability(this.currentHoraDesde, this.currentHoraHasta, this.currentReserva).subscribe(e => {
-      console.warn(e);
-      if (!e && this.flag) {
-        this.flag = false;
-        this.currentReserva.horaDesde = this.aux.horaDesde;
-        this.currentReserva.horaHasta = this.aux.horaHasta;
-        this.currentReserva.fecha = this.reservaForm.get('fecha').value;
-        this.buildForm();
-        this.getToast('Error en la reserva', 'La sala no esta disponible para esas horas', 'red');
-      }
-    },
-    error => {
-      console.error(`error al encontrar peticion ${error}`);
-    });
+    this.reservaService
+      .checkAvailability(
+        this.currentHoraDesde,
+        this.currentHoraHasta,
+        this.currentReserva
+      )
+      .subscribe(
+        e => {
+          console.warn(e);
+          if (!e && this.flag) {
+            this.flag = false;
+            this.currentReserva.horaDesde = this.aux.horaDesde;
+            this.currentReserva.horaHasta = this.aux.horaHasta;
+            this.currentReserva.fecha = this.reservaForm.get('fecha').value;
+            this.buildForm();
+            this.getToast(
+              'Error en la reserva',
+              'La sala no esta disponible para esas horas',
+              'red'
+            );
+          }
+        },
+        error => {
+          console.error(`error al encontrar peticion ${error}`);
+        }
+      );
   }
 
   searchDateReservaDesdeChange() {
-    this.currentHoraDesde = document.getElementById('search-date-desde-input').getAttribute('value');
+    this.currentHoraDesde = document
+      .getElementById('search-date-desde-input')
+      .getAttribute('value');
     this.sharedService.updateStartHour(this.currentHoraDesde);
 
     this.onClickHoraHastaAttachObserbableToAdd30();
 
-    if ((this.currentHoraDesde !== '') && (this.currentHoraHasta !== '')) {
-
+    if (this.currentHoraDesde !== '' && this.currentHoraHasta !== '') {
       this.currentReservationData();
       this.flag = true;
-
     }
-
   }
 
   searchDateReservaHastaChange() {
-    this.currentHoraHasta = document.getElementById('search-date-hasta-input').getAttribute('value');
+    this.currentHoraHasta = document
+      .getElementById('search-date-hasta-input')
+      .getAttribute('value');
     this.sharedService.updateEndHour(this.currentHoraHasta);
 
-    if ((this.currentHoraDesde !== '') && (this.currentHoraHasta !== '')) {
-
+    if (this.currentHoraDesde !== '' && this.currentHoraHasta !== '') {
       this.currentReservationData();
       this.flag = true;
     }
-
   }
 
   accept() {
@@ -410,7 +424,7 @@ export class ReservaComponent implements OnInit {
   }
 
   private parseStringToDate(str: string): Date {
-    const[hour, minutes] = str.split(':');
+    const [hour, minutes] = str.split(':');
     const date = new Date();
 
     date.setHours(Number.parseInt(hour));
@@ -426,13 +440,17 @@ export class ReservaComponent implements OnInit {
   private onClickHoraHastaAttachObserbableToAdd30() {
     let suscripcion: Subscription;
     this.currentHoraDesde$ = this.sharedService.getCurrentHoraDesde$();
-    suscripcion = this.currentHoraDesde$
-      .subscribe(chd => this.currentHoraHasta = this.addThirtyMinutes(chd));
+    suscripcion = this.currentHoraDesde$.subscribe(
+      chd => (this.currentHoraHasta = this.addThirtyMinutes(chd))
+    );
     suscripcion.unsubscribe();
   }
 
   showIdSalaView() {
-       return this.reservaForm.get('idSala').invalid || this.reservaForm.get('idSala').value === 0;
+    return (
+      this.reservaForm.get('idSala').invalid ||
+      this.reservaForm.get('idSala').value === 0
+    );
   }
 
   getOriginalHourValue() {
@@ -443,10 +461,18 @@ export class ReservaComponent implements OnInit {
   checkAllDays($event) {
     console.log(this.reservaForm.get('weekDays').value);
     if ($event.target.checked) {
-      this.daysArray.controls.forEach((e, i) => e.setValue(this.weekDays[i].value));
-    }else {
+      this.daysArray.controls.forEach((e, i) =>
+        e.setValue(this.weekDays[i].value)
+      );
+    } else {
       this.daysArray.controls.forEach(e => e.setValue(null));
     }
+  }
+
+  setCheckAllDays() {
+    this.daysArray.controls.forEach((e, i) =>
+        e.setValue(this.weekDays[i].value)
+      );
   }
 
   get daysArray() {
