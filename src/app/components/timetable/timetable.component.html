@@ -1,21 +1,21 @@
 <div class="row" id="agenda">
-  <div *ngIf="salas.length > 0">
-    <div class="row rooms" *ngFor="let sala of salas; let i = index">
-      <div class="col s12 rooms-name" *ngIf="numberroom == sala.idSala">
-        <h5><strong>{{currentOffice}}</strong></h5>
-        <h5 id="{{i}}">{{sala.nombre}}</h5>
-      </div>
+  <div *ngIf="!error; else notResult">
+    <header class="col s12 rooms-name">
+      <h5><strong>{{currentOffice}}</strong></h5>
+      <h5>{{currentSala.nombre}}</h5>
+    </header>
+    <!--Sirve para la maquetacion del calendario cuando la sala y la oficina es correcta-->
+    <section class="col s0 l2"></section>
+    <!--se usa para centrar el calendario en dispositivos grandes-->
+    <div class="col l8 s12">
+      <ng-fullcalendar #ucCalendar [options]="calendarOptions" [(eventsModel)]="events"></ng-fullcalendar>
     </div>
   </div>
-  <!--Sirve para la maquetacion del calendario cuando la sala y la oficina es correcta-->
-  <section class="col s0 l2" *ngIf="resultFound"></section>
-  <!--se usa para centrar el calendario en dispositivos grandes-->
-  <div class="col l8 s12" *ngIf="resultFound; else notResult">
-    <ng-fullcalendar #ucCalendar [options]="calendarOptions" (clickButton)="clickButton($event.detail)" [(eventsModel)]="events"></ng-fullcalendar>
-  </div>
+
+  <ng-template #notResult>
+    <div id="x">
+      <app-page-not-found></app-page-not-found>
+    </div>
+  </ng-template>
+  
 </div>
-<ng-template #notResult>
-  <div id="x">
-    <app-page-not-found></app-page-not-found>
-  </div>
-</ng-template>

@@ -19,11 +19,11 @@ import { Sala } from '../_data/sala.model';
 export class TimetableComponent implements OnInit {
 
   private calendarOptions: OptionsInput;
-  private date: Date;
-  private events = [];
+  public events = [];
   private newEvents = [];
 
-  private seconds = 60;
+  private seconds: number = 60;
+  private error: boolean = false;
 
   public currentSala = new Sala();
   public currentSala$: Observable<Sala>;
@@ -34,7 +34,6 @@ export class TimetableComponent implements OnInit {
   public numberroom: Number;
 
   private currentOffice: String;
-  private resultFound: Boolean = false;
 
   private calendario: JQuery<HTMLElement>;
 
@@ -78,49 +77,45 @@ export class TimetableComponent implements OnInit {
     }, 100);
     setInterval(() => this.loadEvents(), this.seconds * 1000);
   }
-
+  
   loadEvents() {
     this.newEvents = [];
     this.numberroom = this.route.snapshot.params.room;
-    this.resultFound = false;
 
     this.oficinaService.getOficinas().subscribe(res => {
-      res.forEach(e => {
-        if(e.idOficina == this.route.snapshot.params.office)
-          this.currentOffice = e.nombreOficina
-      })
+      const currentOffice  = res.find(e => e.idOficina == this.route.snapshot.params.office);
+      if(currentOffice != undefined){
+        this.currentOffice = currentOffice.nombreOficina;
+      }else{
+        this.error = true;
+      }
     });
 
     this.oficinaService.getSalasByOficina(this.route.snapshot.params.office).subscribe(res => {
       this.salas = res;
-      res.forEach(office_ => {
-        if (this.route.snapshot.params.room !== undefined) {
-          this.reservaService.getReservasBySala(this.route.snapshot.params.room).subscribe(responseAux => {
-            
-            this.currentSala.reservas = responseAux;
-            this.currentSala.reservas.forEach(e => {
-
-              if(office_.idSala == e.idSala) {
-
-                this.resultFound = true;
-
-              const el = {
-                start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
-                title: `${e.asunto}\t\t\t(${e.usuario.nombre})`,
-                end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
-              };
-              this.newEvents.push(el);
-              }
-            });
-            this.renderEvents();
-          
-          });
-        }
-      })
+      const currentSala: Sala = res.find(e => e.idSala == this.route.snapshot.params.room);
+      if (currentSala != undefined) {
+        this.getReservas(currentSala.idSala)
+        this.currentSala.nombre = currentSala.nombre
+      }else{
+        this.error = true;
+      }
     });
+  }
 
-    
-
+  getReservas(idSala: number) {
+    this.reservaService.getReservasBySala(idSala).subscribe(responseAux => {
+      this.currentSala.reservas = responseAux;
+      this.currentSala.reservas.forEach(e => {
+        const el = {
+          start: new Date(`${this.convertHoras(e.fecha)} ${e.horaDesde}`),
+          title: `${e.asunto}\t\t\t(${e.usuario.nombre})`,
+          end: new Date(`${this.convertHoras(e.fecha)} ${e.horaHasta}`),
+        };
+        this.newEvents.push(el);
+      });
+      this.renderEvents();
+    });
   }
 
   renderEvents() {
@@ -142,62 +137,8 @@ export class TimetableComponent implements OnInit {
     this.calendario.fullCalendar('removeEvents', eventsToRemove);
   }
 
-
-  getToast(info, mensaje, action) {
-    const message = `${info} ${mensaje}`;
-    const toastStr = `<span>${message}</span>`;
-    toast(toastStr, 7000, action);
-  }
-
   convertHoras(str) {
     return str.split('-').reverse().join('-');
   }
 
-  restarHoras(reservaAuxList) {
-    reservaAuxList.forEach(item => {
-      const horaInicioReservas = 8 * 60;
-
-      const horaInicioBegin = 0;
-      const horaInicioMiddle = item.horaDesde.indexOf(':');
-      const horaInicioEnd = item.horaDesde.length;
-
-      const horaInicio = item.horaDesde.substr(
-        horaInicioBegin,
-        horaInicioMiddle
-      );
-      const minInicio = item.horaDesde.substr(
-        horaInicioMiddle + 1,
-        horaInicioEnd
-      );
-
-      let horas = parseInt(horaInicio, 10) * 60;
-      let minutos = parseInt(minInicio, 10);
-      const inicioMinutos = horas + minutos;
-
-      const minutoDesde = inicioMinutos - horaInicioReservas;
-
-      const horaFinBegin = 0;
-      const horaFinMiddle = item.horaHasta.indexOf(':');
-      const horaFinEnd = item.horaHasta.length;
-
-      const horaFin = item.horaHasta.substr(horaFinBegin, horaFinMiddle);
-      const minFin = item.horaHasta.substr(horaFinMiddle + 1, horaFinEnd);
-
-      horas = parseInt(horaFin, 10) * 60;
-      minutos = parseInt(minFin, 10);
-      const finMinutos = horas + minutos;
-
-      const duracion = finMinutos - inicioMinutos;
-
-      item.minutodesde = minutoDesde;
-      item.duracion = duracion;
-    });
-
-    return reservaAuxList;
-  }
-
-  clickButton(model: any) {
-    console.log('Modl', model);
-    this.loadEvents();
-  }
 }
